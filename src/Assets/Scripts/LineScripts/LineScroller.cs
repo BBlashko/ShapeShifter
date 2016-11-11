@@ -2,14 +2,13 @@
 
 public class LineScroller : MonoBehaviour {
 
-    public void Init(float xSpeed, Vector3[] startingLinePositions, float totalWidthOfLines)
+    public void Init(float xSpeed, Vector3[] startingLinePositions, float resetX, float leftXResetTrigger, float width)
     {
-        float height = Camera.main.orthographicSize * 2.0f;
-        mScreenWidth = height * Screen.width / Screen.height; 
-        mScreenLeftXPosition = 0 - (mScreenWidth / 2);
+        mScreenWidth = width;
+        mScreenLeftXPosition = leftXResetTrigger;
         mXSpeed = xSpeed;
         mCurrentLinePositions = startingLinePositions;
-        mTotalWidthOfLines = totalWidthOfLines;
+        mResetX = resetX;
     }
 
     public Vector3[] UpdateLinePositions()
@@ -19,7 +18,7 @@ public class LineScroller : MonoBehaviour {
             float xPosition = mCurrentLinePositions[i].x + mXSpeed;
             if (xPosition <= mScreenLeftXPosition)
             {
-                xPosition += mTotalWidthOfLines;
+                xPosition += mResetX;
             }
             mCurrentLinePositions[i] = new Vector3(xPosition, mCurrentLinePositions[i].y, mCurrentLinePositions[i].z);
         }
@@ -30,5 +29,5 @@ public class LineScroller : MonoBehaviour {
     private float mScreenWidth;
     private float mXSpeed;
     private Vector3[] mCurrentLinePositions;
-    private float mTotalWidthOfLines;
+    private float mResetX;
 }

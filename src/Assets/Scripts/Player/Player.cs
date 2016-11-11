@@ -43,8 +43,6 @@ public class Player : MonoBehaviour
         {
             CheckHorizontalSpeed();
         }
-
-        Debug.Log(mPlayerShapeRigidBody.velocity);
     }
 
     void OnCollisionEnter(Collision collisionInfo)

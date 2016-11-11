@@ -42,7 +42,7 @@ public class GroundLines : MonoBehaviour {
             lineRenderer.SetPositions(linePositions);
 
             LineScroller lineScroller = line.AddComponent<LineScroller>();
-            lineScroller.Init(xSpeed, linePositions, numberOfLines * lineHeight);
+            lineScroller.Init(xSpeed, linePositions, numberOfLines * lineHeight, 0 - (screenWidth / 2), screenWidth);
             mLines.Add(line);
         }
     }
