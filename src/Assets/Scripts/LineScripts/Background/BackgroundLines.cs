@@ -76,7 +76,6 @@ public class BackgroundLines : MonoBehaviour {
             LineRenderer lineRenderer = line.GetComponent<LineRenderer>();
             Vector3[] linePositions = { mLineVertices[i % mNumVertices], mLineVertices[(i + 1) % mNumVertices] };
             lineRenderer.SetPositions(linePositions);
-            Debug.Log("Line 1: " + mLineVertices[i % mNumVertices] + " " + mLineVertices[(i + 1) % mNumVertices]);
             LineScroller lineScroller = line.AddComponent<LineScroller>();
             lineScroller.Init(xSpeed, linePositions, mSegmentSize * 2.0f + mScreenWidth, -mSegmentSize, mScreenWidth);
             mLineObjects.Add(line);
