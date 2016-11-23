@@ -11,10 +11,12 @@ public class GroundScroller : MonoBehaviour {
         foreach (GameObject section in GroundSections)
         {
             section.transform.position += Velocity * Time.deltaTime;
-            if (section.transform.position.x < (-9.025 * 2))
+            if (section.transform.position.x < -mGroundSectionLength)
             {
                 section.transform.position += new Vector3(36.0f, 0.0f, 0.0f);
             }
         }
     }
+
+    private float mGroundSectionLength = 9.025f * 2.0f;
 }
