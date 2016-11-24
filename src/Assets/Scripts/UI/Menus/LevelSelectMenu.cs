@@ -18,5 +18,5 @@
     }
 
     private LevelSelectMenu() { }
-    public static LevelSelectMenu instance;
+    private static LevelSelectMenu instance;
 }

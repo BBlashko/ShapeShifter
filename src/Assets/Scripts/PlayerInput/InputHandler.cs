@@ -97,7 +97,7 @@ public class InputHandler : MonoBehaviour {
                                 touchDistance = touch.position.y - mTouchStart.y;
                                 if (touchDistance > mMinSwipeDistance)
                                 {
-                                    //DO SOMETHING
+                                    PlayerMovement.Instance.Jump();
                                     Debug.Log("[TouchHandler] UPSWIPE");
                                     Debug.Log("[TouchHandler] y distance = " + touchDistance);
                                 }
@@ -107,6 +107,7 @@ public class InputHandler : MonoBehaviour {
                                 }
                                 break;
                             case SwipeDirection.DOWNSWIPE:
+                                PlayerMovement.Instance.Drop();
                                 touchDistance = mTouchStart.y - touch.position.y;
                                 if (touchDistance > mMinSwipeDistance)
                                 {
@@ -123,6 +124,7 @@ public class InputHandler : MonoBehaviour {
                                 touchDistance = mTouchStart.x - touch.position.x;
                                 if (touchDistance > mMinSwipeDistance)
                                 {
+                                    PlayerMovement.Instance.EnableDefaultShape();
                                     Debug.Log("[TouchHandler] LEFTSWIPE");
                                     Debug.Log("[TouchHandler] x distance = " + touchDistance);
                                 }
@@ -132,6 +134,7 @@ public class InputHandler : MonoBehaviour {
                                 }
                                 break;
                             case SwipeDirection.RIGHTSWIPE:
+                                PlayerMovement.Instance.Burst();
                                 touchDistance = touch.position.x - mTouchStart.x;
                                 if (touchDistance > mMinSwipeDistance)
                                 {
@@ -154,23 +157,23 @@ public class InputHandler : MonoBehaviour {
     {
         if (Input.GetKeyDown("w"))
         {
+            PlayerMovement.Instance.Jump();
             Debug.Log("[TouchHandler] w ");
         }
         else if (Input.GetKeyDown("a"))
         {
+            PlayerMovement.Instance.EnableDefaultShape();
             Debug.Log("[TouchHandler] a ");
         }
         else if (Input.GetKeyDown("d"))
         {
+            PlayerMovement.Instance.Burst();
             Debug.Log("[TouchHandler] d ");
         }
         else if (Input.GetKeyDown("s"))
         {
+            PlayerMovement.Instance.Drop();
             Debug.Log("[TouchHandler] s ");
-        }
-        else if (Input.GetKeyDown("escape"))
-        {
-            MenuManager.Instance.PopMenu();
         }
     }
 #endif

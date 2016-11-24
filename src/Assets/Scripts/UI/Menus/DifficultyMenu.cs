@@ -33,5 +33,5 @@
     }
 
     private DifficultyMenu() { }
-    public static DifficultyMenu instance;
+    private static DifficultyMenu instance;
 }

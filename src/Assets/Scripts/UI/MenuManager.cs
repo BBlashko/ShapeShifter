@@ -74,8 +74,11 @@ public class MenuManager {
         mMenuStack = new Stack();
     }
 
+    //Instance
     private static MenuManager instance;
     private Stack mMenuStack;
+
+    //GameObjects
     private GameObject mCurrentMenu;
     private GameObject mParentMenuGameObject;
     private GameObject[] mMenuGameObjects;

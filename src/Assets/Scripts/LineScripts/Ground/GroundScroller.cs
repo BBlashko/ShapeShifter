@@ -18,5 +18,10 @@ public class GroundScroller : MonoBehaviour {
         }
     }
 
+    public Vector3 GetVelocity()
+    {
+        return Velocity;
+    }
+
     private float mGroundSectionLength = 9.025f * 2.0f;
 }
