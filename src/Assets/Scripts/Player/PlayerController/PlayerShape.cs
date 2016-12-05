@@ -38,6 +38,20 @@ public class PlayerShape {
         }
     }
 
+    public void EnableParticles()
+    {
+        mSquareShape.GetComponentInChildren<ParticleSystem>().Play();
+        mRectangleShape.GetComponentInChildren<ParticleSystem>().Play();
+        mTriangleShape.GetComponentInChildren<ParticleSystem>().Play();
+    }
+
+    public void DisableParticles()
+    {
+        mSquareShape.GetComponentInChildren<ParticleSystem>().Stop();
+        mRectangleShape.GetComponentInChildren<ParticleSystem>().Stop();
+        mTriangleShape.GetComponentInChildren<ParticleSystem>().Stop();
+    }
+
     private void DisableCurrentShape()
     {
         switch (CurrentShape)

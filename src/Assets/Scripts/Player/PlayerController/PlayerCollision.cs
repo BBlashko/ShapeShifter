@@ -16,10 +16,15 @@ public class PlayerCollision {
 
     public void OnCollisionEnter(Collision collisionInfo)
     {
+        Debug.Log("GameObject name on collision enter = " + collisionInfo.gameObject.name);
         if (collisionInfo.gameObject.transform.tag == mLeftBoundaryTag)
         {
             Debug.Log("CollisionEntered");
             PlayerMovement.Instance.IsAgainstLeftBoundary = true;
+        }
+        else if (collisionInfo.gameObject.transform.tag == mGroundTag)
+        {
+            PlayerMovement.Instance.EnableParticles();
         }
     }
 
@@ -29,6 +34,10 @@ public class PlayerCollision {
         {
             Debug.Log("CollisionExit");
             PlayerMovement.Instance.IsAgainstLeftBoundary = false;
+        }
+        else if (collisionInfo.gameObject.transform.tag == mGroundTag)
+        {
+            PlayerMovement.Instance.DisableParticles();
         }
     }
 
@@ -48,4 +57,5 @@ public class PlayerCollision {
     //GameObject Tags
     private const string mGroundTag = "Ground";
     private const string mLeftBoundaryTag = "LeftBoundary";
+    private const string mToken = "Token";
 }

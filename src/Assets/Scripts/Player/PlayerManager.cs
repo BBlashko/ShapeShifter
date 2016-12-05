@@ -5,7 +5,6 @@ public class PlayerManager : MonoBehaviour
     void Start()
     {
         PlayerMovement.Instance.EnableDefaultShape();
-
     }
 
     void FixedUpdate()

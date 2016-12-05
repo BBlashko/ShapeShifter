@@ -59,7 +59,7 @@ public class MenuManager {
     {
         string[] names = Enum.GetNames(typeof(Menus));
         mMenuGameObjects = new GameObject[names.Length];
-        mParentMenuGameObject = GameObject.Find("MainMenuCanvas");
+        mParentMenuGameObject = GameObject.Find("MenuCanvas");
 
         for (int i = 0; i < names.Length; i++)
         {

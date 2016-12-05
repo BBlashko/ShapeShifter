@@ -1,15 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TokenManager : MonoBehaviour {
+public class TokenManager : Token {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public static TokenManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = new TokenManager();
+            }
+            return instance;
+        }
+    }
+
+    private TokenManager() { }
+    private static TokenManager instance;
 }

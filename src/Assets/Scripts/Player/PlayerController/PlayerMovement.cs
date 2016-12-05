@@ -26,6 +26,17 @@ public class PlayerMovement : PlayerShape {
         {
             mPlayerRigidBody.AddForce(mHorizontalForce);
         }
+        
+        if (!mIsFalling && !mParticlesEnabled)
+        {
+            EnableParticles();
+            mParticlesEnabled = true;
+        }
+        else if (mIsFalling && mParticlesEnabled)
+        {
+            DisableParticles();
+            mParticlesEnabled = false;
+        }
     }
 
     #region Player Controlled Movements
@@ -131,7 +142,7 @@ public class PlayerMovement : PlayerShape {
     private static PlayerMovement instance;
     private GameObject mPlayerObject;
     private Rigidbody mPlayerRigidBody;
-
+    private bool mParticlesEnabled = false;
     //Boundary Booleans
     private bool mIsAgainstLeftBoundary = false;
 
