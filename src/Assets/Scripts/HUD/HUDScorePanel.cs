@@ -1,5 +1,4 @@
 ﻿using UnityEngine.UI;
-using System.Collections;
 
 public class HUDScorePanel {
     public static HUDScorePanel Instance

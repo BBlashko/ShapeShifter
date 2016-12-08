@@ -2,21 +2,26 @@
 
 public class PlayerShape {
 
-    public enum Shape { RECTANGLE, SQUARE, TRIANGLE }
+    public enum Shape { RECTANGLE, SQUARE, TRIANGLE, DEATH }
     public Shape CurrentShape;
 
     public void Instantiate(GameObject player)
     {
+        //Gameobjects
         mSquareShape = player.transform.FindChild(mSquareObjectName).gameObject;
         mTriangleShape = player.transform.FindChild(mTriangleObjectName).gameObject;
         mRectangleShape = player.transform.FindChild(mRectangleObjectName).gameObject;
 
+        //Particle Systems
+        mPlayerDeathParticles = player.transform.FindChild(mDeathParticlesName).GetComponent<ParticleSystem>();
+
+        //Boundaries
         mLeftBoundary = GameObject.Find(mLeftBoundaryName);
     }
 
     public void ChangeShape(Shape shape)
     {
-        if (CurrentShape != shape)
+        if (CurrentShape != shape && CurrentShape != Shape.DEATH)
         {
             DisableCurrentShape();
             switch (shape)
@@ -32,6 +37,8 @@ public class PlayerShape {
                     break;
                 case Shape.TRIANGLE:
                     mTriangleShape.SetActive(true);
+                    break;
+                default:
                     break;
             }
             CurrentShape = shape;
@@ -52,6 +59,37 @@ public class PlayerShape {
         mTriangleShape.GetComponentInChildren<ParticleSystem>().Stop();
     }
 
+    public void Spawn()
+    {
+        //TODO: Add ability to respawn player at a default location
+    }
+
+    public void Death()
+    {
+        if (CurrentShape != Shape.DEATH)
+        {
+            DisableCurrentShape();
+
+            //Default is Square Shape Material
+            Material material = mSquareShape.transform.GetComponent<MeshRenderer>().material;
+            switch (CurrentShape)
+            {
+                case Shape.RECTANGLE:
+                    material = mRectangleShape.transform.GetComponent<MeshRenderer>().material;
+                    break;
+                case Shape.TRIANGLE:
+                    material = mTriangleShape.transform.GetComponentInChildren<MeshRenderer>().material;
+                    break;
+                default:
+                    break;
+            }
+
+            CurrentShape = Shape.DEATH;
+            mPlayerDeathParticles.GetComponent<ParticleSystemRenderer>().material = material;
+            mPlayerDeathParticles.Play();
+        }
+    }
+
     private void DisableCurrentShape()
     {
         switch (CurrentShape)
@@ -68,6 +106,9 @@ public class PlayerShape {
             case Shape.TRIANGLE:
                 mTriangleShape.SetActive(false);
                 break;
+            case Shape.DEATH:
+                mPlayerDeathParticles.Stop();
+                break;
             default:
                 break;
         }
@@ -78,10 +119,14 @@ public class PlayerShape {
     private GameObject mTriangleShape;
     private GameObject mRectangleShape;
 
+    //Death Particles
+    private ParticleSystem mPlayerDeathParticles;
+
     //Resource Path Strings
     private string mSquareObjectName = "SquareMesh";
     private string mTriangleObjectName = "TriangleMesh";
     private string mRectangleObjectName = "RectangleMesh";
+    private string mDeathParticlesName = "DeathParticles";
 
     //LeftBoundary Gameobject
     //Needed for when the shape is changed to a rectangle
