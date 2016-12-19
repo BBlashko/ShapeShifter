@@ -14,7 +14,8 @@
 
     public void LevelButton(int i)
     {
-        //TODO
+        GamePlayManager.Instance.LoadLevel(i);
+        GamePlayManager.Instance.StartGame();
     }
 
     private LevelSelectMenu() { }

@@ -16,11 +16,27 @@ public class PlayerMovement : PlayerShape {
 
     public void Update()
     {
-        ////Player burst checks
+        //Check Position for death
+        if (mPlayerObject.transform.position.y < -5.2f)
+        {
+            InstantDeath();
+        }
+
+        //Check if player is falling
+        if (mPlayerRigidBody.velocity.y != 0 && !mIsFalling)
+        {
+            mIsFalling = true;
+        }
+        else if (mPlayerRigidBody.velocity.y == 0 && mIsFalling)
+        {
+            mIsFalling = false;
+        }
+
+        //Player burst checks
         if (mPlayerRigidBody.velocity.x <= 0.5f && mIsBursting)
         {
             mIsBursting = false;
-            mPlayerRigidBody.useGravity = true;
+            SetGravity(true);
         }
         else if (mIsBursting)
         {
@@ -37,6 +53,11 @@ public class PlayerMovement : PlayerShape {
             DisableParticles();
             mParticlesEnabled = false;
         }
+    }
+
+    public void SetGravity(bool b)
+    {
+        mPlayerRigidBody.useGravity = b;
     }
 
     #region Player Controlled Movements
@@ -71,6 +92,7 @@ public class PlayerMovement : PlayerShape {
     }
 
     //Triangular right "Burst" acceleration
+    //TODO: Consider changing burst action to encorporate camera.
     public void Burst()
     {
         if (mIsAgainstLeftBoundary)
@@ -93,16 +115,36 @@ public class PlayerMovement : PlayerShape {
     #region Collision
     public void GroundCollision(Collision collisionInfo)
     {
-        if (!mIsAgainstLeftBoundary && !mIsBursting)
+        if (!mAllowedDoubleJump)
         {
-            GameObject collisionObject = collisionInfo.gameObject;
-            float xSpeed = collisionObject.GetComponentInParent<GroundScroller>().GetVelocity().x;
-            mPlayerRigidBody.MovePosition(mPlayerObject.transform.position + Vector3.right * xSpeed * Time.fixedDeltaTime);
+            mAllowedDoubleJump = true;
         }
         if (mIsFalling)
         {
             mIsFalling = false;
         }
+
+        //Moving players finished burst towards the left boundary
+        if (!mIsAgainstLeftBoundary && !mIsBursting)
+        {
+            GameObject collisionObject = collisionInfo.gameObject;
+
+            float xSpeed;
+
+            GroundScroller gs;
+            if ((gs = collisionObject.GetComponentInParent<GroundScroller>()) != null)
+            {
+                xSpeed = collisionObject.GetComponentInParent<GroundScroller>().Velocity.x;
+            }
+            else
+            {
+                xSpeed = collisionObject.GetComponentsInParent<LevelScroller>()[0].Velocity.x;
+            }
+            
+            mPlayerRigidBody.MovePosition(mPlayerObject.transform.position + Vector3.right * xSpeed * Time.deltaTime);
+        }
+
+      
     }
     #endregion
 
@@ -113,11 +155,11 @@ public class PlayerMovement : PlayerShape {
         set { mIsAgainstLeftBoundary = value; }
     }
 
-    public bool IsFalling
-    {
-        get { return mIsFalling; }
-        set { mIsFalling = value; }
-    }
+    //public bool IsFalling
+    //{
+    //    get { return mIsFalling; }
+    //    set { mIsFalling = value; }
+    //}
 
     public bool AllowedDoubleJump
     {

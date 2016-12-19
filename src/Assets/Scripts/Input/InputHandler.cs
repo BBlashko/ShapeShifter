@@ -35,18 +35,21 @@ public class InputHandler : MonoBehaviour {
                     mStartTime = Time.time;
                     mSwipeDirection = SwipeDirection.NOSWIPE;
                     mDirectionChosen = false;
-                    Debug.Log("[TouchHandler] Touch started");
+                    //Debug.Log("[TouchHandler] Touch began");
                     break;
                 case TouchPhase.Moved:
+                    //Debug.Log("[TouchHandler] Touch moved");
                     if (!mDirectionChosen)
                     {
+                        Debug.Log("[TouchHandler] Touch moved");
                         if (Mathf.Abs(touch.position.y - mTouchStart.y) < mEpsilon &&
-                            Mathf.Abs(touch.position.x - mTouchStart.x) > mEpsilon)
+                            Mathf.Abs(touch.position.x - mTouchStart.x) > mMinSwipeDistance)
                         {
                             if (touch.position.x < mTouchStart.x)
                             {
                                 mDirectionChosen = true;
                                 mSwipeDirection = SwipeDirection.LEFTSWIPE;
+                                Debug.Log("[TouchHandler] Touch moved");
                             }
                             else
                             {
@@ -54,7 +57,7 @@ public class InputHandler : MonoBehaviour {
                                 mSwipeDirection = SwipeDirection.RIGHTSWIPE;
                             }
                         }
-                        else if (Mathf.Abs(touch.position.y - mTouchStart.y) > mEpsilon &&
+                        else if (Mathf.Abs(touch.position.y - mTouchStart.y) > mMinSwipeDistance &&
                                  Mathf.Abs(touch.position.x - mTouchStart.x) < mEpsilon)
                         {
                             if (touch.position.y < mTouchStart.y)
@@ -74,17 +77,21 @@ public class InputHandler : MonoBehaviour {
                         mSwipeDirection != SwipeDirection.NOSWIPE)
                     {
                         mSwipeDirection = SwipeDirection.NOSWIPE;
-                        Debug.Log("[TouchHandler] touch cancelled outside of epsilon range.");
+                        Debug.Log("[TouchHandler] touch cancelled! outside of epsilon range.");
                     }
                     break;
                 case TouchPhase.Canceled:
+                    Debug.Log("[TouchHandler] touch canceled");
+                    break;
                 case TouchPhase.Stationary:
-                    mSwipeDirection = SwipeDirection.NOSWIPE;
-                    Debug.Log("[TouchHandler] touch cancelled");
+
+                    //mSwipeDirection = SwipeDirection.NOSWIPE;
+                    Debug.Log("[TouchHandler] touch stationary");
                     break;
                 case TouchPhase.Ended:
+                    Debug.Log("[TouchHandler] touch ended");
                     float elapsedTime = Time.time - mStartTime;
-                    Debug.Log("[TouchHandler] elapsed swipe time = " + elapsedTime);
+                    //Debug.Log("[TouchHandler] elapsed swipe time = " + elapsedTime);
                     if (elapsedTime < mMaxSwipeTime)
                     {
                         float touchDistance;
@@ -149,6 +156,8 @@ public class InputHandler : MonoBehaviour {
                         }
                     }
                     break;
+                default:
+                    break;
             }
         }
     }
@@ -183,6 +192,6 @@ public class InputHandler : MonoBehaviour {
     private bool mDirectionChosen = false;
     private SwipeDirection mSwipeDirection;               //vertical = 0;
     private float mEpsilon = 200.0f;
-    private float mMinSwipeDistance = 250.0f;
-    private float mMaxSwipeTime = 0.5f;
+    private float mMinSwipeDistance = 50.0f;
+    private float mMaxSwipeTime = 1.0f;
 }

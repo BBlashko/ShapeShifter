@@ -64,10 +64,26 @@ public class PlayerShape {
         //TODO: Add ability to respawn player at a default location
     }
 
-    public void Death()
+    public void InstantDeath()
+    {
+        Death(false);
+    }
+
+    public void CheckDeath(Shape shape)
+    {
+        Death(false, shape);
+    }
+
+    private void Death(bool checkShape, Shape shape = Shape.SQUARE)
     {
         if (CurrentShape != Shape.DEATH)
         {
+            if (checkShape && CurrentShape == shape)
+            {
+                Debug.Log("Currentshape = " + CurrentShape + " Shape = " + shape);
+                return;
+            }
+
             DisableCurrentShape();
 
             //Default is Square Shape Material

@@ -56,6 +56,7 @@
      <Compile Include="Assets\Scripts\LineScripts\Ground\GroundLines.cs" />
      <Compile Include="Assets\Scripts\LineScripts\Ground\GroundScroller.cs" />
      <Compile Include="Assets\Scripts\LineScripts\LineScroller.cs" />
+     <Compile Include="Assets\Scripts\Obstacles\ObstacleDisableTrigger.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerController\PlayerCollision.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerController\PlayerMovement.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerController\PlayerShape.cs" />
@@ -70,9 +71,6 @@
      <Compile Include="Assets\Scripts\UI\Menus\LevelSelectMenu.cs" />
      <Compile Include="Assets\Scripts\UI\Menus\MainMenu.cs" />
      <Compile Include="Assets\Scripts\UI\Menus\PlayMenu.cs" />
- <Reference Include="UnityEngine.Advertisements">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
- </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
@@ -87,9 +85,6 @@
  </Reference>
  <Reference Include="UnityEngine.HoloLens">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.Purchasing">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityPurchasing/UnityEngine.Purchasing.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.VR">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll</HintPath>
