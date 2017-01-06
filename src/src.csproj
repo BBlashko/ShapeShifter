@@ -81,15 +81,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\GamePlay\CreateGame.cs" />
-    <Compile Include="Assets\Scripts\GamePlay\Game.cs" />
     <Compile Include="Assets\Scripts\GamePlay\GamePlayManager.cs" />
     <Compile Include="Assets\Scripts\GamePlay\LevelScroller.cs" />
     <Compile Include="Assets\Scripts\HUD\HUDManager.cs" />
     <Compile Include="Assets\Scripts\HUD\HUDScorePanel.cs" />
     <Compile Include="Assets\Scripts\Input\InputHandler.cs" />
     <Compile Include="Assets\Scripts\LineScripts\Background\BackgroundLines.cs" />
-    <Compile Include="Assets\Scripts\LineScripts\Ground\GroundLines.cs" />
     <Compile Include="Assets\Scripts\LineScripts\Ground\GroundScroller.cs" />
     <Compile Include="Assets\Scripts\LineScripts\LineScroller.cs" />
     <Compile Include="Assets\Scripts\Obstacles\ObstacleDisableTrigger.cs" />

@@ -35,10 +35,10 @@ public class InputHandler : MonoBehaviour {
                     mStartTime = Time.time;
                     mSwipeDirection = SwipeDirection.NOSWIPE;
                     mDirectionChosen = false;
-                    //Debug.Log("[TouchHandler] Touch began");
+                    Debug.Log("[TouchHandler] Touch began");
                     break;
                 case TouchPhase.Moved:
-                    //Debug.Log("[TouchHandler] Touch moved");
+                    Debug.Log("[TouchHandler] Touch moved");
                     if (!mDirectionChosen)
                     {
                         Debug.Log("[TouchHandler] Touch moved");
@@ -85,13 +85,13 @@ public class InputHandler : MonoBehaviour {
                     break;
                 case TouchPhase.Stationary:
 
-                    //mSwipeDirection = SwipeDirection.NOSWIPE;
+                    mSwipeDirection = SwipeDirection.NOSWIPE;
                     Debug.Log("[TouchHandler] touch stationary");
                     break;
                 case TouchPhase.Ended:
                     Debug.Log("[TouchHandler] touch ended");
                     float elapsedTime = Time.time - mStartTime;
-                    //Debug.Log("[TouchHandler] elapsed swipe time = " + elapsedTime);
+                    Debug.Log("[TouchHandler] elapsed swipe time = " + elapsedTime);
                     if (elapsedTime < mMaxSwipeTime)
                     {
                         float touchDistance;

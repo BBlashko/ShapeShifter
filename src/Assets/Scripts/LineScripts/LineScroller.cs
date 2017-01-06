@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
-public class LineScroller : MonoBehaviour {
+public class LineScroller : MonoBehaviour
+{
 
     public void Init(float xSpeed, Vector3[] startingLinePositions, float resetX, float leftXResetTrigger, float width)
     {

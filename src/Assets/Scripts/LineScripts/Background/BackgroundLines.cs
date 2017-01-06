@@ -104,7 +104,7 @@ public class BackgroundLines : MonoBehaviour {
         mLineGameObject = new GameObject();
         mLineGameObject.transform.parent = gameObject.transform;
         mLineGameObject.name = name;
-        mLineGameObject.transform.position = new Vector3(-mScreenWidth / 2.0f, 0.0f, 0.0f);
+        mLineGameObject.transform.position = new Vector3(-mScreenWidth / 2.0f, 0.0f, 3.0f);
     }
 
     //screen
