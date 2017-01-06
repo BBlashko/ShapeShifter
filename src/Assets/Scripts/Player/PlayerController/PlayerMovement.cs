@@ -17,7 +17,7 @@ public class PlayerMovement : PlayerShape {
     public void Update()
     {
         //Check Position for death
-        if (mPlayerObject.transform.position.y < -5.2f)
+        if (mPlayerObject.transform.position.y < -5.2f || mPlayerObject.transform.position.x < -6.0f)
         {
             InstantDeath();
         }
@@ -92,10 +92,9 @@ public class PlayerMovement : PlayerShape {
     }
 
     //Triangular right "Burst" acceleration
-    //TODO: Consider changing burst action to encorporate camera.
     public void Burst()
     {
-        if (mIsAgainstLeftBoundary)
+        if ((mIsAgainstLeftBoundary || GamePlayManager.Instance.PlayingLevel) && !mIsBursting)
         {
             ChangeShape(Shape.TRIANGLE);
             mIsBursting = true;
@@ -125,7 +124,7 @@ public class PlayerMovement : PlayerShape {
         }
 
         //Moving players finished burst towards the left boundary
-        if (!mIsAgainstLeftBoundary && !mIsBursting)
+        if (!mIsAgainstLeftBoundary && !mIsBursting && !GamePlayManager.Instance.PlayingLevel)
         {
             GameObject collisionObject = collisionInfo.gameObject;
 
