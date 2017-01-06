@@ -9,4 +9,9 @@ public class LevelScroller : MonoBehaviour {
     {
         gameObject.transform.position += Velocity * Time.deltaTime;
     }
+
+    public void StopScrolling()
+    {
+        Velocity = new Vector3(0.0f, 0.0f, 0.0f);
+    }
 }

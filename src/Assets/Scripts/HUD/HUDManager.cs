@@ -1,6 +1,5 @@
 ﻿using UnityEngine.UI;
 using UnityEngine;
-using System.Collections;
 
 public class HUDManager : MonoBehaviour {
 
@@ -10,5 +9,20 @@ public class HUDManager : MonoBehaviour {
     void Start()
     {
         HUDScorePanel.Instance.SetTextObjects(ScoreText, TokenText);
+    }
+
+    void OnEnable()
+    {
+        ResetPanel();
+    }
+
+    void OnDisable()
+    {
+        ResetPanel();
+    }
+
+    public void ResetPanel()
+    {
+        HUDScorePanel.Instance.Reset();
     }
 }

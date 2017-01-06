@@ -93,6 +93,19 @@ public class ButtonManager : MonoBehaviour {
     }
     #endregion
 
+    #region GameOverMenus
+    public void RespawnButton()
+    {
+        GameOverMenu.Instance.RespawnButton();
+    }
+
+    public void LevelSelectButton()
+    {
+        GameOverMenu.Instance.LevelSelectButton();
+    }
+
+    #endregion
+
 
 
     //menu objects

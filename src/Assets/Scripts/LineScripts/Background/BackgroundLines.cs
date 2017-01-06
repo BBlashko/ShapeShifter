@@ -18,7 +18,7 @@ public class BackgroundLines : MonoBehaviour {
 
     void Update()
     {
-        if (mLineObjects != null)
+        if (mLineObjects != null && mIsScrolling)
         {
             for (int i = 0; i < mLineObjects.Count; i++)
             {
@@ -29,6 +29,16 @@ public class BackgroundLines : MonoBehaviour {
                 CheckToDisableLineRenderer(i, nextPositions);
             }
         }
+    }
+
+    public void StartScrolling()
+    {
+        mIsScrolling = true;
+    }
+
+    public void StopScrolling()
+    {
+        mIsScrolling = false;
     }
 
     private void SetLinePositions()
@@ -117,4 +127,7 @@ public class BackgroundLines : MonoBehaviour {
     private List<GameObject> mLineObjects;
     private float mSegmentSize;
     private int mNumVertices;
+
+    //Start/Stop Scrolling
+    private bool mIsScrolling = true;
 }

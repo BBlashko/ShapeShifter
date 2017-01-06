@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 public class MenuManager {
 
     public enum Menus { MainMenu = 0,
-                        PlayMenu = 1,
-                        LevelSelectMenu = 2,
-                        DifficultyMenu = 3,
-                        ExitMenu = 4 }
+        PlayMenu = 1,
+        LevelSelectMenu = 2,
+        DifficultyMenu = 3,
+        ExitMenu = 4,
+        GameOverLevelMenu = 5 }
 
     public static MenuManager Instance
     {
@@ -22,21 +24,44 @@ public class MenuManager {
         }
     }
 
+    public void DisableCurrentMenu()
+    {
+        mCurrentMenu.SetActive(false);
+    }
+
+    public void EnableCurrentMenu()
+    {
+        mCurrentMenu.SetActive(true);
+    }
+
+    ////Display menu without adding to the menu stack
+    ////Thus, this menu can not be returned to if pop attempted.
+    //public void DisplayMenu(Menus menu)
+    //{
+    //    if (mCurrentMenu != null)
+    //    {
+    //        mCurrentMenu.SetActive(false);
+    //    }
+    //    mCurrentMenu = mMenuGameObjects[Convert.ToInt32(menu)];
+    //    mCurrentMenu.SetActive(true);
+    //}
+
+    //Display menu and add to the stack to be popped by a back button
     public void PushMenu(Menus menu)
     {
         if (mCurrentMenu != null)
         {
             mCurrentMenu.SetActive(false);
 
-            //never add the ExitMenu to the stack
-            if (mCurrentMenu.name != "ExitMenu")
+            //never add the ExitMenu or GameOverLevelMenu to the stack
+            if (CheckIfStackableMenu(menu))
             {
                 mMenuStack.Push(mCurrentMenu);
             }
         }
         mCurrentMenu = mMenuGameObjects[Convert.ToInt32(menu)];
         mCurrentMenu.SetActive(true);
-       
+
     }
 
     public void PopMenu()
@@ -44,7 +69,7 @@ public class MenuManager {
         if (mMenuStack.Count != 0)
         {
             mCurrentMenu.SetActive(false);
-            mCurrentMenu = (GameObject) mMenuStack.Pop();
+            mCurrentMenu = (GameObject)mMenuStack.Pop();
             mCurrentMenu.SetActive(true);
         }
         else
@@ -52,6 +77,18 @@ public class MenuManager {
             //no menus left to pop. Display ExitMenu
             PushMenu(Menus.ExitMenu);
         }
+    }
+
+    private bool CheckIfStackableMenu(Menus menu)
+    {
+        foreach (string name in mNonStackableMenuNames)
+        {
+            if (mCurrentMenu.name == name)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     //Load all different menus in the scene
@@ -82,4 +119,9 @@ public class MenuManager {
     private GameObject mCurrentMenu;
     private GameObject mParentMenuGameObject;
     private GameObject[] mMenuGameObjects;
+
+    //Non stackable menus
+    private string[] mNonStackableMenuNames = new string[] { "ExitMenu",
+                                                             "GameOverLevelMenu"
+                                                           };
 }

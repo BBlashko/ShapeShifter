@@ -7,6 +7,8 @@ public class PlayerShape {
 
     public void Instantiate(GameObject player)
     {
+        mPlayerInitialPosition = player.transform.position;
+
         //Gameobjects
         mSquareShape = player.transform.FindChild(mSquareObjectName).gameObject;
         mTriangleShape = player.transform.FindChild(mTriangleObjectName).gameObject;
@@ -59,9 +61,13 @@ public class PlayerShape {
         mTriangleShape.GetComponentInChildren<ParticleSystem>().Stop();
     }
 
-    public void Spawn()
+    public void Respawn()
     {
-        //TODO: Add ability to respawn player at a default location
+        mPlayerObject.transform.position = mPlayerInitialPosition;
+        DisableCurrentShape();
+        mSquareShape.SetActive(true);
+        CurrentShape = Shape.SQUARE;
+        mPlayerRigidBody.isKinematic = false;
     }
 
     public void InstantDeath()
@@ -84,6 +90,7 @@ public class PlayerShape {
                 return;
             }
 
+            mPlayerRigidBody.isKinematic = true;
             DisableCurrentShape();
 
             //Default is Square Shape Material
@@ -103,6 +110,8 @@ public class PlayerShape {
             CurrentShape = Shape.DEATH;
             mPlayerDeathParticles.GetComponent<ParticleSystemRenderer>().material = material;
             mPlayerDeathParticles.Play();
+
+            GamePlayManager.Instance.GameOver();
         }
     }
 
@@ -124,11 +133,16 @@ public class PlayerShape {
                 break;
             case Shape.DEATH:
                 mPlayerDeathParticles.Stop();
+                mPlayerDeathParticles.Clear();
                 break;
             default:
                 break;
         }
     }
+
+    //Player Objects
+    public GameObject mPlayerObject;
+    public Rigidbody mPlayerRigidBody;
 
     //Prefabs
     private GameObject mSquareShape;
@@ -148,5 +162,7 @@ public class PlayerShape {
     //Needed for when the shape is changed to a rectangle
     private GameObject mLeftBoundary;
     private const string mLeftBoundaryName = "LeftBoundary";
-   
+
+    //Reset Player
+    private Vector3 mPlayerInitialPosition;
 }

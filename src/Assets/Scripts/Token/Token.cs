@@ -19,7 +19,8 @@ public class Token : MonoBehaviour {
             //Update current games token count.
             HUDScorePanel.Instance.UpdateScore(100);
             HUDScorePanel.Instance.UpdateTokenCount(1);
-            Destroy(gameObject);
+            gameObject.SetActive(false);
+            mIsColliding = false;
         }
     }
 

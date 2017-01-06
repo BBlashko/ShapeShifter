@@ -8,13 +8,13 @@ public class GroundScroller : MonoBehaviour {
 
     void Start()
     {
+        mStartingPosition = GroundSections[0].transform.position;
         InitialVelocity = Velocity;
         mSectionResetPosition = new Vector3(GroundSections.Length * GroundSectionLength, 0.0f, 0.0f);
     }
 
     void Update()
     {
-
         for (int i = 0; i < GroundSections.Length; i++)
         {
             GameObject section = GroundSections[i];
@@ -49,14 +49,30 @@ public class GroundScroller : MonoBehaviour {
         return Velocity;
     }
 
-    private void StopScrolling()
+    public void StopScrolling()
     {
         Velocity = new Vector3(0.0f, 0.0f, 0.0f);
     }
 
-    private void StartScrolling()
+    public void StartScrolling()
     {
         Velocity = InitialVelocity;
+    }
+
+    public void ResetGround()
+    {
+        for (int i = 0; i < GroundSections.Length; i++)
+        {
+            GameObject section = GroundSections[i];
+            section.transform.position = new Vector3(mStartingPosition.x + (GroundSectionLength * i), mStartingPosition.y, mStartingPosition.z);
+        }
+
+        //level starting variables
+        mFirstResetSectionIndex = -1;
+        mFinishedStartingLevel = false;
+        mStartingLevelFirstReset = true;
+
+        StartScrolling();
     }
 
     private Vector3 InitialVelocity;
@@ -65,4 +81,6 @@ public class GroundScroller : MonoBehaviour {
     private int mFirstResetSectionIndex = -1;
     private bool mFinishedStartingLevel = false;
     private bool mStartingLevelFirstReset = true;
+
+    private Vector3 mStartingPosition;
 }

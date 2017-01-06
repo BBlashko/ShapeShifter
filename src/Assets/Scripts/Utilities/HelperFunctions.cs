@@ -2,7 +2,7 @@
 
 public static class HelperFunctions {
 
-    public static GameObject FindInActiveGameObject(string name)
+    public static GameObject FindInactiveGameObject(string name)
     {
         Transform[] trs = Resources.FindObjectsOfTypeAll<Transform>();
         foreach (Transform t in trs)

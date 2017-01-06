@@ -27,7 +27,9 @@ public class HUDScorePanel {
             ScoreText.text = "0";
             TokenText.text = "0";
         }
-    }
+        mScoreCount = 0;
+        mTokenCount = 0;
+}
 
     public void UpdateScore(int score)
     {
@@ -45,6 +47,16 @@ public class HUDScorePanel {
             mTokenCount += count;
             TokenText.text = mTokenCount.ToString();
         }
+    }
+
+    public int GetScore()
+    {
+        return mScoreCount;
+    }
+
+    public int GetToken()
+    {
+        return mTokenCount;
     }
 
     private static HUDScorePanel instance;

@@ -182,9 +182,8 @@ public class PlayerMovement : PlayerShape {
     }
     
     private static PlayerMovement instance;
-    private GameObject mPlayerObject;
-    private Rigidbody mPlayerRigidBody;
     private bool mParticlesEnabled = false;
+
     //Boundary Booleans
     private bool mIsAgainstLeftBoundary = false;
 
