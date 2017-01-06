@@ -23,9 +23,10 @@ public class InputHandler : MonoBehaviour {
 #if UNITY_IPHONE || UNITY_ANDROID
     private void CheckInput()
     {
-        
-        if (Input.touchCount == 1)
+
+        if (Input.touchCount > 0)
         {
+            Debug.Log("[InputHandler] TouchCount = " + Input.touchCount);
             Touch touch = Input.GetTouch(0);
 
             switch (touch.phase)
@@ -33,126 +34,65 @@ public class InputHandler : MonoBehaviour {
                 case TouchPhase.Began:
                     mTouchStart = touch.position;
                     mStartTime = Time.time;
-                    mSwipeDirection = SwipeDirection.NOSWIPE;
-                    mDirectionChosen = false;
-                    Debug.Log("[TouchHandler] Touch began");
+                    //mSwipeDirection = SwipeDirection.NOSWIPE;
+                    mIsPossibleSwipe = true;
+                    Debug.Log("[InputHandler] began swipe = true");
                     break;
                 case TouchPhase.Moved:
-                    Debug.Log("[TouchHandler] Touch moved");
-                    if (!mDirectionChosen)
+                    //Check for swipe out of bounds
+                    if (mIsPossibleSwipe)
                     {
-                        Debug.Log("[TouchHandler] Touch moved");
-                        if (Mathf.Abs(touch.position.y - mTouchStart.y) < mEpsilon &&
-                            Mathf.Abs(touch.position.x - mTouchStart.x) > mMinSwipeDistance)
+                        if (Mathf.Abs(touch.position.y - mTouchStart.y) > mEpsilon &&
+                            Mathf.Abs(touch.position.x - mTouchStart.x) > mEpsilon)
                         {
-                            if (touch.position.x < mTouchStart.x)
-                            {
-                                mDirectionChosen = true;
-                                mSwipeDirection = SwipeDirection.LEFTSWIPE;
-                                Debug.Log("[TouchHandler] Touch moved");
-                            }
-                            else
-                            {
-                                mDirectionChosen = true;
-                                mSwipeDirection = SwipeDirection.RIGHTSWIPE;
-                            }
-                        }
-                        else if (Mathf.Abs(touch.position.y - mTouchStart.y) > mMinSwipeDistance &&
-                                 Mathf.Abs(touch.position.x - mTouchStart.x) < mEpsilon)
-                        {
-                            if (touch.position.y < mTouchStart.y)
-                            {
-                                mDirectionChosen = true;
-                                mSwipeDirection = SwipeDirection.DOWNSWIPE;
-                            }
-                            else
-                            {
-                                mDirectionChosen = true;
-                                mSwipeDirection = SwipeDirection.UPSWIPE;
-                            }
+                            Debug.Log("[InputHandler] Moved swipe = false");
+                            mIsPossibleSwipe = false;
                         }
                     }
-                    if (Mathf.Abs(touch.position.y - mTouchStart.y) > mEpsilon &&
-                        Mathf.Abs(touch.position.x - mTouchStart.x) > mEpsilon &&
-                        mSwipeDirection != SwipeDirection.NOSWIPE)
-                    {
-                        mSwipeDirection = SwipeDirection.NOSWIPE;
-                        Debug.Log("[TouchHandler] touch cancelled! outside of epsilon range.");
-                    }
                     break;
-                case TouchPhase.Canceled:
-                    Debug.Log("[TouchHandler] touch canceled");
-                    break;
-                case TouchPhase.Stationary:
-
-                    mSwipeDirection = SwipeDirection.NOSWIPE;
-                    Debug.Log("[TouchHandler] touch stationary");
-                    break;
+                //case TouchPhase.Canceled:
+                //case TouchPhase.Stationary:
+                //    Debug.Log("[InputHandler] Moved cancelled or stationary = false");
+                //    mIsPossibleSwipe = false;
+                //    break;
                 case TouchPhase.Ended:
-                    Debug.Log("[TouchHandler] touch ended");
                     float elapsedTime = Time.time - mStartTime;
-                    Debug.Log("[TouchHandler] elapsed swipe time = " + elapsedTime);
-                    if (elapsedTime < mMaxSwipeTime)
+                    if (mIsPossibleSwipe && elapsedTime < mMaxSwipeTime)
                     {
-                        float touchDistance;
-                        switch (mSwipeDirection)
+                        Debug.Log("[InputHandler] Ended Possible Swipe");
+                        Vector2 touchDistance;
+                        touchDistance = new Vector2(Mathf.Abs(touch.position.x - mTouchStart.x), Mathf.Abs(touch.position.y - mTouchStart.y));
+
+                        if (touchDistance.x > touchDistance.y && touchDistance.x > mMinSwipeDistance)
                         {
-                            case SwipeDirection.NOSWIPE:
-                                Debug.Log("[TouchHandler] NO SWIPE");
-                                break;
-                            case SwipeDirection.UPSWIPE:
-                                touchDistance = touch.position.y - mTouchStart.y;
-                                if (touchDistance > mMinSwipeDistance)
-                                {
-                                    PlayerMovement.Instance.Jump();
-                                    Debug.Log("[TouchHandler] UPSWIPE");
-                                    Debug.Log("[TouchHandler] y distance = " + touchDistance);
-                                }
-                                else
-                                {
-                                    Debug.Log("[TouchHandler] no swipe x distance = " + touchDistance);
-                                }
-                                break;
-                            case SwipeDirection.DOWNSWIPE:
-                                PlayerMovement.Instance.Drop();
-                                touchDistance = mTouchStart.y - touch.position.y;
-                                if (touchDistance > mMinSwipeDistance)
-                                {
-                                    //DO SOMETHING
-                                    Debug.Log("[TouchHandler] DOWNSWIPE");
-                                    Debug.Log("[TouchHandler] y distance = " + touchDistance);
-                                }
-                                else
-                                {
-                                    Debug.Log("[TouchHandler] no swipe x distance = " + touchDistance);
-                                }
-                                break;
-                            case SwipeDirection.LEFTSWIPE:
-                                touchDistance = mTouchStart.x - touch.position.x;
-                                if (touchDistance > mMinSwipeDistance)
-                                {
-                                    PlayerMovement.Instance.EnableDefaultShape();
-                                    Debug.Log("[TouchHandler] LEFTSWIPE");
-                                    Debug.Log("[TouchHandler] x distance = " + touchDistance);
-                                }
-                                else
-                                {
-                                    Debug.Log("[TouchHandler] no swipe x distance = " + touchDistance);
-                                }
-                                break;
-                            case SwipeDirection.RIGHTSWIPE:
+                            Debug.Log("[InputHandler] Ended Possible Horizontal Swipe");
+                            //Horizontal swipe attempt
+                            if (touch.position.x - mTouchStart.x < 0)
+                            {
+                                PlayerMovement.Instance.EnableDefaultShape();
+                            }
+                            else
+                            {
                                 PlayerMovement.Instance.Burst();
-                                touchDistance = touch.position.x - mTouchStart.x;
-                                if (touchDistance > mMinSwipeDistance)
-                                {
-                                    Debug.Log("[TouchHandler] RIGHTSWIPE");
-                                    Debug.Log("[TouchHandler] x distance = " + touchDistance);
-                                }
-                                else
-                                {
-                                    Debug.Log("[TouchHandler] no swipe x distance = " + touchDistance);
-                                }
-                                break;
+                            }
+                        }
+                        else if (touchDistance.y >= touchDistance.x && touchDistance.y > mMinSwipeDistance)
+                        {
+                            Debug.Log("[InputHandler] Ended Possible Vertical Swipe");
+                            //Vertical swipe attempt
+                            if (touch.position.y - mTouchStart.y < 0)
+                            {
+                                PlayerMovement.Instance.Drop();
+                            }
+                            else
+                            {
+                                PlayerMovement.Instance.Jump();
+                            }
+                        }
+                        else
+                        {
+                            //No Swipe
+                            Debug.Log("[InputHandler] Ended no Swipe");
                         }
                     }
                     break;
@@ -189,7 +129,7 @@ public class InputHandler : MonoBehaviour {
 
     private Vector2 mTouchStart;
     private float mStartTime;
-    private bool mDirectionChosen = false;
+    private bool mIsPossibleSwipe = false;
     private SwipeDirection mSwipeDirection;               //vertical = 0;
     private float mEpsilon = 200.0f;
     private float mMinSwipeDistance = 50.0f;
