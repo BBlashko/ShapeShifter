@@ -1,4 +1,5 @@
-﻿using UnityEngine.UI;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class HUDScorePanel {
     public static HUDScorePanel Instance
@@ -13,55 +14,65 @@ public class HUDScorePanel {
         }
     }
 
-    public void SetTextObjects(Text score, Text tokens)
+    public void Update()
     {
-        ScoreText = score;
-        TokenText = tokens;
-        Reset();
+        UpdateScore();
+        UpdateTokenCount();
+        UpdateTime();
+        //TODO:
+        //UpdateDistance();
     }
 
-    public void Reset()
+    public void SetTextObjects(Text score, Text tokens, Text[] time, GameObject distance)
     {
-        if (ScoreText != null && TokenText != null)
-        {
-            ScoreText.text = "0";
-            TokenText.text = "0";
-        }
-        mScoreCount = 0;
-        mTokenCount = 0;
-}
+        mScoreText = score;
+        mTokenText = tokens;
+        mTimeText = time;
+        mDistanceGameObject = distance;
+    }
 
-    public void UpdateScore(int score)
+    private void UpdateScore()
     {
-        if (ScoreText != null)
+        if (mScoreText != null)
         {
-            mScoreCount += score;
-            ScoreText.text = mScoreCount.ToString();
+            mScoreText.text = GamePlayManager.Instance.GetCurrentGame().Score.ToString();
         }
     }
 
-    public void UpdateTokenCount(int count)
+    private void UpdateTokenCount()
     {
-        if (TokenText != null)
+        if (mTokenText != null)
         {
-            mTokenCount += count;
-            TokenText.text = mTokenCount.ToString();
+            mTokenText.text = GamePlayManager.Instance.GetCurrentGame().Tokens.ToString();
         }
     }
 
-    public int GetScore()
+    private void UpdateDistance()
     {
-        return mScoreCount;
+
     }
 
-    public int GetToken()
+    private void UpdateTime()
     {
-        return mTokenCount;
+        if(mTimeText != null)
+        {
+            int elapsedTime = (int) GamePlayManager.Instance.GetCurrentGame().ElapsedTime;
+
+            string [] time = HelperFunctions.ConvertTime(elapsedTime);
+            mTimeText[0].text = time[0];
+            mTimeText[1].text = time[1];
+            mTimeText[2].text = time[2];
+        }
     }
 
     private static HUDScorePanel instance;
-    private Text ScoreText;
-    private Text TokenText;
-    private int mScoreCount = 0;
-    private int mTokenCount = 0;
+
+    //HUD Objects
+    private Text mScoreText;
+    private Text mTokenText;
+    private Text[] mTimeText;
+    private GameObject mDistanceGameObject;
+
+    //Final Stats
+    private int mFinalTime;
 }

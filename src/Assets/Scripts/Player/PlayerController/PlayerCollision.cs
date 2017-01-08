@@ -46,9 +46,10 @@ public class PlayerCollision {
                 default:
                     break;
             }
-            
-            //TODO: Add level ending function call
-            //TODO: Call menu activation
+        }
+        else if (collisionInfo.gameObject.transform.tag == TagManager.LevelComplete)
+        {
+            GamePlayManager.Instance.LevelCompleted();
         }
     }
 
@@ -72,7 +73,6 @@ public class PlayerCollision {
         {
             PlayerMovement.Instance.GroundCollision(collisionInfo);
         }
-
     }
 
     //Class instance

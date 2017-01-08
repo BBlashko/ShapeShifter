@@ -17,8 +17,8 @@ public class Token : MonoBehaviour {
             mIsColliding = true;
 
             //Update current games token count.
-            HUDScorePanel.Instance.UpdateScore(100);
-            HUDScorePanel.Instance.UpdateTokenCount(1);
+            GamePlayManager.Instance.GetCurrentGame().Tokens = 1;
+            GamePlayManager.Instance.GetCurrentGame().Score = 100;
             gameObject.SetActive(false);
             mIsColliding = false;
         }

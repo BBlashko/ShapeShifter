@@ -18,14 +18,18 @@ public class GamePlayManager {
     {
         if (!PlayingLevel)
         {
+            mCurrentLevelId = id;
             mCurrentLevel = GameObject.Instantiate(Resources.Load(prefabPath + id.ToString(), typeof(GameObject))) as GameObject;
             mCurrentLevel.transform.SetParent(GameObject.Find("GamePlay").transform, false);
             mCurrentLevelInitialPosition = mCurrentLevel.transform.position;
+
+            CreateNewCurrentGame();
         }
     }
 
     public void StartGame()
     {
+        StartCurrentGame();
         mPlayingLevel = true;
         MenuManager.Instance.DisableCurrentMenu();
 
@@ -36,19 +40,17 @@ public class GamePlayManager {
     //TODO:
     public void LevelCompleted()
     {
-        PlayingLevel = false;
+        StopGame();
         //Save Stats
+        //TODO: Save player stats
+
         //load menu
+        MenuManager.Instance.PushMenu(MenuManager.Menus.LevelCompleteMenu);
     }
 
     public void GameOver()
     {
-        PlayingLevel = false;
-
-        //Stop Level, Ground, and Background Scroller
-        mLevelScroller.StopScrolling();
-        mGroundScroller.StopScrolling();
-        mBackgroundScroller.StopScrolling();
+        StopGame();
 
         //load menu
         MenuManager.Instance.PushMenu(MenuManager.Menus.GameOverLevelMenu);
@@ -57,6 +59,7 @@ public class GamePlayManager {
 
     public void Respawn()
     {
+        CreateNewCurrentGame();
         PlayerMovement.Instance.Respawn();
         mGroundScroller.ResetGround();
         mBackgroundScroller.StartScrolling();
@@ -76,11 +79,13 @@ public class GamePlayManager {
     public void ResetEnvironment()
     {
         DestroyCurrentLevel();
+        DestroyCurrentGame();
         mCurrentLevel = null;
 
         PlayerMovement.Instance.Respawn();
         mGroundScroller.ResetGround();
         mBackgroundScroller.StartScrolling();
+        Camera.main.transform.position = new Vector3(0.0f, 0.0f, -10.0f);
     }
 
     public void DestroyCurrentLevel()
@@ -100,6 +105,45 @@ public class GamePlayManager {
         set { mPlayingLevel = value; }
     }
 
+    private void StopGame()
+    {
+        mPlayingLevel = false;
+        mCurrentGame.SetFinalTime();
+
+        //Stop Level, Ground, and Background Scroller
+        mLevelScroller.StopScrolling();
+        mGroundScroller.StopScrolling();
+        mBackgroundScroller.StopScrolling();
+        mHUDCanvas.SetActive(false);
+    }
+
+    #region CurrentGame
+    public CurrentGame GetCurrentGame()
+    {
+        return mCurrentGame;
+    }
+
+    private void CreateNewCurrentGame()
+    {
+        string levelCompletePath = "GamePlay/Level" + mCurrentLevelId.ToString() + "(Clone)" + levelCompleteGameObjectName;
+        Debug.Log(levelCompletePath);
+        float totalDistance = GameObject.Find(levelCompletePath).transform.position.x;
+        mCurrentGame = new CurrentGame(totalDistance);
+    }
+
+    private void StartCurrentGame()
+    {
+        mCurrentGame.StartGame();
+    }
+
+    private void DestroyCurrentGame()
+    {
+        mCurrentGame = null;
+    }
+
+    #endregion
+
+
 
     //Class instance
     private GamePlayManager()
@@ -111,8 +155,11 @@ public class GamePlayManager {
         mMenuCanvas = GameObject.Find(mMenuCanvasName);
     }
 
-    
     private static GamePlayManager instance;
+
+    //CurrentGame
+    private const string levelCompleteGameObjectName = "/Platforms/LevelComplete";
+    private CurrentGame mCurrentGame;
 
     //LevelScroller
     private LevelScroller mLevelScroller;
@@ -128,6 +175,7 @@ public class GamePlayManager {
     private GameObject mCurrentLevel;
     private const string prefabPath = "Prefabs/Levels/Level";
     private Vector3 mCurrentLevelInitialPosition;
+    private int mCurrentLevelId;
 
     //HUDCanvas
     private GameObject mMenuCanvas;

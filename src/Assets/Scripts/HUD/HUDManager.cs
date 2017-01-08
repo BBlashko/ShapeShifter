@@ -5,24 +5,20 @@ public class HUDManager : MonoBehaviour {
 
     public Text ScoreText;
     public Text TokenText;
+    public Text[] TimeText;
+    public GameObject DistanceGameObject;
+
+    //TODO:
+    //public GameObject DistanceObject
+    //public Text TimeText;
 
     void Start()
     {
-        HUDScorePanel.Instance.SetTextObjects(ScoreText, TokenText);
+        HUDScorePanel.Instance.SetTextObjects(ScoreText, TokenText, TimeText, DistanceGameObject);
     }
 
-    void OnEnable()
+    void Update()
     {
-        ResetPanel();
-    }
-
-    void OnDisable()
-    {
-        ResetPanel();
-    }
-
-    public void ResetPanel()
-    {
-        HUDScorePanel.Instance.Reset();
+        HUDScorePanel.Instance.Update();
     }
 }

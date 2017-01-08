@@ -23,7 +23,7 @@ public class InputHandler : MonoBehaviour {
 #if UNITY_IPHONE || UNITY_ANDROID
     private void CheckInput()
     {
-
+        
         if (Input.touchCount > 0)
         {
             Debug.Log("[InputHandler] TouchCount = " + Input.touchCount);
@@ -94,6 +94,10 @@ public class InputHandler : MonoBehaviour {
                             //No Swipe
                             Debug.Log("[InputHandler] Ended no Swipe");
                         }
+                    }
+                    else if (elapsedTime < mMaxSwipeTime)
+                    {
+                        PlayerMovement.Instance.Jump();
                     }
                     break;
                 default:
