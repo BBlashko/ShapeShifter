@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
-using System.Collections.Generic;
 
 public class MenuManager {
 
@@ -10,7 +9,8 @@ public class MenuManager {
         LevelSelectMenu = 2,
         DifficultyMenu = 3,
         ExitMenu = 4,
-        GameOverLevelMenu = 5 }
+        GameOverLevelMenu = 5,
+        LevelCompleteMenu = 6}
 
     public static MenuManager Instance
     {
@@ -66,7 +66,7 @@ public class MenuManager {
 
     public void PopMenu()
     {
-        if (mMenuStack.Count != 0)
+        if (mMenuStack.Count != 0 && !GamePlayManager.Instance.PlayingLevel)
         {
             mCurrentMenu.SetActive(false);
             mCurrentMenu = (GameObject)mMenuStack.Pop();
@@ -122,6 +122,7 @@ public class MenuManager {
 
     //Non stackable menus
     private string[] mNonStackableMenuNames = new string[] { "ExitMenu",
-                                                             "GameOverLevelMenu"
+                                                             "GameOverLevelMenu",
+                                                             "LevelCompleteMenu"
                                                            };
 }

@@ -36,19 +36,17 @@ public class GamePlayManager {
     //TODO:
     public void LevelCompleted()
     {
-        PlayingLevel = false;
+        StopGame();
         //Save Stats
+        //TODO: Save player stats
+
         //load menu
+        MenuManager.Instance.PushMenu(MenuManager.Menus.LevelCompleteMenu);
     }
 
     public void GameOver()
     {
-        PlayingLevel = false;
-
-        //Stop Level, Ground, and Background Scroller
-        mLevelScroller.StopScrolling();
-        mGroundScroller.StopScrolling();
-        mBackgroundScroller.StopScrolling();
+        StopGame();
 
         //load menu
         MenuManager.Instance.PushMenu(MenuManager.Menus.GameOverLevelMenu);
@@ -81,6 +79,7 @@ public class GamePlayManager {
         PlayerMovement.Instance.Respawn();
         mGroundScroller.ResetGround();
         mBackgroundScroller.StartScrolling();
+        Camera.main.transform.position = new Vector3(0.0f, 0.0f, -10.0f);
     }
 
     public void DestroyCurrentLevel()
@@ -100,6 +99,16 @@ public class GamePlayManager {
         set { mPlayingLevel = value; }
     }
 
+    private void StopGame()
+    {
+        mPlayingLevel = false;
+
+        //Stop Level, Ground, and Background Scroller
+        mLevelScroller.StopScrolling();
+        mGroundScroller.StopScrolling();
+        mBackgroundScroller.StopScrolling();
+        mHUDCanvas.SetActive(false);
+    }
 
     //Class instance
     private GamePlayManager()

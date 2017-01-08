@@ -12,6 +12,7 @@ public class TagManager {
     public const string Triangle = "Triangle";
     public const string Rectangle = "Rectangle";
     public const string Square = "Square";
+    public const string LevelComplete = "LevelComplete";
 
     public static TagManager Instance
     {
