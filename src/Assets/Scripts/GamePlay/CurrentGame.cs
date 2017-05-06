@@ -11,7 +11,9 @@ public class CurrentGame : MonoBehaviour
     {
         mPlayer = GameObject.Find(mPlayerName);
         string levelCompletePath = "GamePlay/Level" + LevelId.ToString() + "(Clone)" + levelCompleteGameObjectName;
-        mTotalDistance = GameObject.Find(levelCompletePath).transform.position.x; ;
+        mCompletePlatform = GameObject.Find(levelCompletePath);
+        mTotalDistance = mCompletePlatform.transform.position.x;
+        mCompletePlatformWidth = mCompletePlatform.GetComponentInChildren<BoxCollider>().bounds.size.x;
 
         mTokens = 0;
         mScore = 0;
@@ -92,8 +94,12 @@ public class CurrentGame : MonoBehaviour
 
     public float PercentageDistanceLeft()
     {
-        float retval = (mPlayer.transform.position.x - mPlayerStartPositionX) / mTotalDistance;
-        if (retval > 100.0f)
+        float retval = (((mCompletePlatform.transform.position.x - (mCompletePlatformWidth/2)) - mPlayer.transform.position.x) / mTotalDistance) * 100;
+        if (retval < 0.0f)
+        {
+            return 0.0f;
+        }
+        else if (retval > 100.0f)
         {
             return 100.0f;
         }
@@ -101,13 +107,15 @@ public class CurrentGame : MonoBehaviour
     }
 
     //Player pointer
-    private const string mPlayerName = "player";
+    private const string mPlayerName = "GamePlay/Player";
     private GameObject mPlayer;
 
     //Level info
     private const string mPlayerLevelCompleteName = "LevelComplete";
     private const string levelCompleteGameObjectName = "/Platforms/LevelComplete";
     private float mTotalDistance;
+    private GameObject mCompletePlatform;
+    private float mCompletePlatformWidth;
 
     //Current game stats
     private int mTokens;

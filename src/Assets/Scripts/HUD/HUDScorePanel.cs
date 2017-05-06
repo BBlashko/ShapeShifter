@@ -19,16 +19,20 @@ public class HUDScorePanel {
         UpdateScore();
         UpdateTokenCount();
         UpdateTime();
-        //TODO:
-        //UpdateDistance();
+        UpdateDistance();
     }
 
-    public void SetTextObjects(Text score, Text tokens, Text[] time, GameObject distance)
+    public void SetObjects(Text score, Text tokens, Text[] time, Text distance, RectTransform distanceLine, GameObject distanceBar)
     {
         mScoreText = score;
         mTokenText = tokens;
         mTimeText = time;
-        mDistanceGameObject = distance;
+        mDistanceText = distance;
+
+        mDistanceBar = distanceBar;
+        mDistanceLine = distanceLine;
+
+        mDistanceBarInitalPos = mDistanceBar.transform.position;
     }
 
     private void UpdateScore()
@@ -49,7 +53,11 @@ public class HUDScorePanel {
 
     private void UpdateDistance()
     {
+        float percentDistance = (100.0f - GamePlayManager.Instance.GetCurrentGame().PercentageDistanceLeft());
+        mDistanceText.text = percentDistance.ToString("N0") + "%";
 
+        float xPos = mDistanceBarInitalPos.x + ((mDistanceLine.rect.width * mDistanceLine.localScale.x) * (percentDistance/100.0f));
+        mDistanceBar.transform.position = new Vector3(xPos, mDistanceBar.transform.position.y, mDistanceBar.transform.position.z);
     }
 
     private void UpdateTime()
@@ -71,7 +79,12 @@ public class HUDScorePanel {
     private Text mScoreText;
     private Text mTokenText;
     private Text[] mTimeText;
-    private GameObject mDistanceGameObject;
+
+    //distance object
+    private GameObject mDistanceBar;
+    private RectTransform mDistanceLine;
+    private Text mDistanceText;
+    private Vector3 mDistanceBarInitalPos;
 
     //Final Stats
     private int mFinalTime;
