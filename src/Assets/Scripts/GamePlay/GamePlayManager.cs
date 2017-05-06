@@ -40,7 +40,10 @@ public class GamePlayManager {
     //TODO:
     public void LevelCompleted()
     {
+        mCurrentGame.FinalTime = mCurrentGame.ElapsedTime;
+        mCurrentGame.SetStars();
         StopGame();
+
         //Save Stats
         //TODO: Save player stats
 
@@ -108,7 +111,6 @@ public class GamePlayManager {
     private void StopGame()
     {
         mPlayingLevel = false;
-        mCurrentGame.SetFinalTime();
 
         //Stop Level, Ground, and Background Scroller
         mLevelScroller.StopScrolling();
@@ -120,19 +122,21 @@ public class GamePlayManager {
     #region CurrentGame
     public CurrentGame GetCurrentGame()
     {
-        return mCurrentGame;
+        if (mCurrentGame != null)
+        {
+            return mCurrentGame;
+        }
+        return null;
     }
 
     private void CreateNewCurrentGame()
     {
-        string levelCompletePath = "GamePlay/Level" + mCurrentLevelId.ToString() + "(Clone)" + levelCompleteGameObjectName;
-        Debug.Log(levelCompletePath);
-        float totalDistance = GameObject.Find(levelCompletePath).transform.position.x;
-        mCurrentGame = new CurrentGame(totalDistance);
+       
     }
 
     private void StartCurrentGame()
     {
+        mCurrentGame = GameObject.Find("GamePlay/Level" + mCurrentLevelId.ToString() + "(Clone)").GetComponent<CurrentGame>();
         mCurrentGame.StartGame();
     }
 
@@ -142,8 +146,6 @@ public class GamePlayManager {
     }
 
     #endregion
-
-
 
     //Class instance
     private GamePlayManager()
@@ -158,7 +160,6 @@ public class GamePlayManager {
     private static GamePlayManager instance;
 
     //CurrentGame
-    private const string levelCompleteGameObjectName = "/Platforms/LevelComplete";
     private CurrentGame mCurrentGame;
 
     //LevelScroller

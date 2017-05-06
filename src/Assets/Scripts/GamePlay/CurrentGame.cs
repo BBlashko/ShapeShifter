@@ -1,20 +1,27 @@
 ﻿using UnityEngine;
 
-public class CurrentGame {
-
-
-	public CurrentGame(float levelTotalDistance)
-    {
-        mPlayer = GameObject.Find(mPlayerName);
-        mTotalDistance = levelTotalDistance;
-    }
+public class CurrentGame : MonoBehaviour
+{ 
+    public int ScoreRule;
+    public int TimeRule;
+    public int TokenRule;
+    public int LevelId;
 
     public void StartGame()
     {
-       // mPlayerStartPositionX = mPlayer.transform.position.x;
+        mPlayer = GameObject.Find(mPlayerName);
+        string levelCompletePath = "GamePlay/Level" + LevelId.ToString() + "(Clone)" + levelCompleteGameObjectName;
+        mTotalDistance = GameObject.Find(levelCompletePath).transform.position.x; ;
+
         mTokens = 0;
         mScore = 0;
         mStartTime = Time.time;
+
+        //Reset Stars
+        HasFirstStar = false;
+        HasSecondStar = false;
+        mHasThirdStar = false;
+
         Debug.Log("Start  " + mStartTime);
     }
 
@@ -35,14 +42,52 @@ public class CurrentGame {
         get { return Time.time - mStartTime; }
     }
 
-    public void SetFinalTime()
+    public bool HasFirstStar
     {
-        mFinalTime = ElapsedTime;
+        get { return mHasFirstStar; }
+        set { mHasFirstStar = value; }
     }
 
-    public float GetFinalTime()
+    public bool HasSecondStar
     {
-        return mFinalTime;
+        get { return mHasSecondStar; }
+        set { mHasSecondStar = value; }
+    }
+
+    public bool HasThirdStar
+    {
+        get { return mHasThirdStar; }
+        set { mHasThirdStar = value; }
+    }
+
+    public float FinalTime
+    {
+        get { return mFinalTime; }
+        set { mFinalTime = value; }
+    }
+
+    public void SetStars()
+    {
+        //First star
+        Debug.Log(FinalTime + " : " + TimeRule);
+        if (FinalTime <= TimeRule)
+        {
+            HasFirstStar = true;
+        }
+
+        //Second star
+        Debug.Log(Score + " : " + ScoreRule);
+        if (Score >= ScoreRule)
+        {
+            HasSecondStar = true;
+        }
+
+        //Thirdstar
+        Debug.Log(Tokens + " : " + TokenRule);
+        if (Tokens >= TokenRule)
+        {
+            HasThirdStar = true;
+        }
     }
 
     public float PercentageDistanceLeft()
@@ -55,15 +100,24 @@ public class CurrentGame {
         return retval;
     }
 
+    //Player pointer
     private const string mPlayerName = "player";
     private GameObject mPlayer;
 
+    //Level info
     private const string mPlayerLevelCompleteName = "LevelComplete";
+    private const string levelCompleteGameObjectName = "/Platforms/LevelComplete";
     private float mTotalDistance;
 
+    //Current game stats
     private int mTokens;
     private int mScore;
     private float mStartTime;
     private float mPlayerStartPositionX;
     private float mFinalTime;
+
+    //Stars
+    private bool mHasFirstStar = false;
+    private bool mHasSecondStar = false;
+    private bool mHasThirdStar = false;
 }

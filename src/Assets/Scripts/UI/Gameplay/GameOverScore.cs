@@ -12,7 +12,7 @@ public class GameOverScore : MonoBehaviour {
         ScoreText.text = GamePlayManager.Instance.GetCurrentGame().Score.ToString();
         TokenText.text = GamePlayManager.Instance.GetCurrentGame().Tokens.ToString();
 
-        int elapsedTime = (int)GamePlayManager.Instance.GetCurrentGame().GetFinalTime();
+        int elapsedTime = (int)GamePlayManager.Instance.GetCurrentGame().FinalTime;
         string[] time = HelperFunctions.ConvertTime(elapsedTime);
         TimeText[0].text = time[0];
         TimeText[1].text = time[1];

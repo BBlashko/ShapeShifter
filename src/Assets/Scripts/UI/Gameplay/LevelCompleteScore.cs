@@ -9,6 +9,7 @@ public class LevelCompleteScore : MonoBehaviour {
     public Text[] TimeText;
 
     public GameObject [] Stars;
+    public GameObject[] StarFull;
     public GameObject [] StarEmpty;
 
     void Start() {
@@ -20,46 +21,16 @@ public class LevelCompleteScore : MonoBehaviour {
         }
     }
 
-    int k = 100;
-
-    void Update()
-    {
-        if (k == 0)
-        {
-            AnimateStar(0);
-            AnimateStar(1);
-            AnimateStar(2);
-        }
-        k--;
-
-
-    }
-
     void OnEnable()
     {
         //Check stats for each star obtained and play animation for each.
-        /*
-         * if (GamePlayManager.Instance.CurrentGame.IsFirstStars())
-         * {
-         *      AnimateStar(1);
-         * }
-         * 
-         * if (GamePlayManager.Instance.CurrentGame.IsSecondStars())
-         * {
-         *      AnimateStar(2);
-         * }
-         * 
-         * if (GamePlayManager.Instance.CurrentGame.IsThirdStars())
-         * {
-         *      AnimateStar(3);
-         * }
-         */
-
+       
+        StartCoroutine(AnimateStars());
 
         ScoreText.text = GamePlayManager.Instance.GetCurrentGame().Score.ToString();
         TokenText.text = GamePlayManager.Instance.GetCurrentGame().Tokens.ToString();
 
-        string[] time = HelperFunctions.ConvertTime((int) GamePlayManager.Instance.GetCurrentGame().GetFinalTime());
+        string[] time = HelperFunctions.ConvertTime((int) GamePlayManager.Instance.GetCurrentGame().FinalTime);
         TimeText[0].text = time[0];
         TimeText[1].text = time[1];
         TimeText[2].text = time[2];
@@ -71,31 +42,38 @@ public class LevelCompleteScore : MonoBehaviour {
         ResetPlayedOnce();
     }
 
-   private void AnimateStar(int i)
+   private IEnumerator AnimateStars()
     {
-        //StarEmpty[i].SetActive(false);
-        //Stars[i].SetActive(true);
-        if (mStarAnimators[i].enabled == false)
+        yield return new WaitForSeconds(0.100F);
+
+        if (GamePlayManager.Instance.GetCurrentGame().HasFirstStar)
         {
-            mStarAnimators[i].enabled = true;
+            mStarAnimators[0].enabled = true;
+            yield return new WaitForSeconds(0.500F);
         }
 
-        //Check that previous star is not currently animating
-        //mStarAnimators[i].SetBool("PlayedOnce", false);//
-        //mStarAnimators[i].SetTrigger("PlayAnimation");
-        //while (mStarAnimators[i].GetCurrentAnimatorStateInfo(0).IsName("idle_state")) { };
+        if (GamePlayManager.Instance.GetCurrentGame().HasSecondStar)
+        {
+            mStarAnimators[1].enabled = true;
+            yield return new WaitForSeconds(0.500F);
+        }
+
+        if (GamePlayManager.Instance.GetCurrentGame().HasThirdStar)
+        {
+            mStarAnimators[2].enabled = true;
+        }
     }
 
     private void ResetPlayedOnce()
     {
+        Debug.Log("animations reset");
         for (int i = 0; i < mStarAnimators.Length; i++)
         {
+            StarFull[i].gameObject.SetActive(false);
+            StarEmpty[i].gameObject.SetActive(true);
             mStarAnimators[i].enabled = false;
         }
-
     }
 
     private Animator[] mStarAnimators;
-    private bool[] mAnimatorPlayedOnce = {false, false, false};
-
 }
