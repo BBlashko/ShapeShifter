@@ -56,7 +56,10 @@ public class HUDScorePanel {
         float percentDistance = (100.0f - GamePlayManager.Instance.GetCurrentGame().PercentageDistanceLeft());
         mDistanceText.text = percentDistance.ToString("N0") + "%";
 
-        float xPos = mDistanceBarInitalPos.x + ((mDistanceLine.rect.width * mDistanceLine.localScale.x) * (percentDistance/100.0f));
+        float xPos = mDistanceBarInitalPos.x + ((mDistanceLine.rect.width * mDistanceLine.lossyScale.x) * (percentDistance/100.0f));
+
+        Debug.Log("percent distance == " + (percentDistance / 100.0f) + " : DistanceWidth == " + (mDistanceLine.rect.width * mDistanceLine.localScale.x)
+                    + " : mDistanceBarInit == " + mDistanceBarInitalPos.x + " : xpos == " + xPos);
         mDistanceBar.transform.position = new Vector3(xPos, mDistanceBar.transform.position.y, mDistanceBar.transform.position.z);
     }
 
