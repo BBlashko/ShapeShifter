@@ -98,6 +98,7 @@
     <Compile Include="Assets\Scripts\Player\PlayerManager.cs" />
     <Compile Include="Assets\Scripts\Token\Token.cs" />
     <Compile Include="Assets\Scripts\Token\TokenManager.cs" />
+    <Compile Include="Assets\Scripts\Tutorial\Tutorial.cs" />
     <Compile Include="Assets\Scripts\UI\ButtonManager.cs" />
     <Compile Include="Assets\Scripts\UI\Gameplay\GameOverScore.cs" />
     <Compile Include="Assets\Scripts\UI\Gameplay\LevelCompleteScore.cs" />

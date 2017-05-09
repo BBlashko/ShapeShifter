@@ -173,13 +173,19 @@ public class PlayerMovement : PlayerShape {
     }
     #endregion
 
+    public MonoBehaviour MyMonoBehaviour
+    {
+        get { return mMonoBehaviour; }
+        set { mMonoBehaviour = value; }
+    }
+
     private PlayerMovement()
     {
         mPlayerObject = GameObject.Find("Player");
         mPlayerRigidBody = mPlayerObject.GetComponent<Rigidbody>();
         Instantiate(mPlayerObject);
     }
-    
+
     private static PlayerMovement instance;
     private bool mParticlesEnabled = false;
 
@@ -199,5 +205,8 @@ public class PlayerMovement : PlayerShape {
     private Vector3 mBurstVelocity = new Vector3(20.0f, 0.0f, 0.0f);
     private Vector3 mHorizontalForce = new Vector3(-22.0f, 0.0f, 0.0f);
     private bool mIsBursting = false;
+
+    //MonoBehavior Instance
+    private MonoBehaviour mMonoBehaviour;
 
 }

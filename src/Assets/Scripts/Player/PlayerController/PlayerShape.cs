@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class PlayerShape {
 
@@ -63,7 +64,12 @@ public class PlayerShape {
 
     public void Respawn()
     {
-        mPlayerObject.transform.position = mPlayerInitialPosition;
+        Respawn(mPlayerInitialPosition);
+    }
+
+    public void Respawn(Vector3 playerPosition)
+    {
+        mPlayerObject.transform.position = playerPosition;
         DisableCurrentShape();
         mSquareShape.SetActive(true);
         CurrentShape = Shape.SQUARE;
@@ -84,6 +90,7 @@ public class PlayerShape {
     {
         if (CurrentShape != Shape.DEATH)
         {
+            Debug.Log("1");
             if (checkShape && CurrentShape == shape)
             {
                 Debug.Log("Currentshape = " + CurrentShape + " Shape = " + shape);
@@ -95,6 +102,7 @@ public class PlayerShape {
 
             //Default is Square Shape Material
             Material material = mSquareShape.transform.GetComponent<MeshRenderer>().material;
+            Debug.Log("2");
             switch (CurrentShape)
             {
                 case Shape.RECTANGLE:
@@ -111,8 +119,25 @@ public class PlayerShape {
             mPlayerDeathParticles.GetComponent<ParticleSystemRenderer>().material = material;
             mPlayerDeathParticles.Play();
 
-            GamePlayManager.Instance.GameOver();
+            if (GamePlayManager.Instance.GetCurrentGame().LevelId != 0)
+            {
+                GamePlayManager.Instance.GameOver();
+            }
+            else
+            {
+                Debug.Log("Player Died during tutorial");
+                
+                PlayerMovement.Instance.MyMonoBehaviour.StartCoroutine(PlayDeathAnimationAndRespawnPlayer());
+            }
         }
+    }
+
+    private IEnumerator PlayDeathAnimationAndRespawnPlayer()
+    {
+        GamePlayManager.Instance.PauseGame();
+        yield return new WaitForSeconds(2.0f);
+        GamePlayManager.Instance.ResumeGame();
+        GamePlayManager.Instance.TutorialRespawnPlayer();
     }
 
     private void DisableCurrentShape()

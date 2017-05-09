@@ -4,6 +4,11 @@ public class LevelScroller : MonoBehaviour {
 
     public Vector3 Velocity;
 
+    void Start()
+    {
+        mInitialVelocity = Velocity;
+    }
+
     //Update is called once per frame
     void Update()
     {
@@ -14,4 +19,11 @@ public class LevelScroller : MonoBehaviour {
     {
         Velocity = new Vector3(0.0f, 0.0f, 0.0f);
     }
+
+    public void StartScrolling()
+    {
+        Velocity = mInitialVelocity;
+    }
+
+    private Vector3 mInitialVelocity;
 }

@@ -35,6 +35,7 @@ public class PlayerCollision {
             switch (collisionInfo.gameObject.tag)
             {
                 case TagManager.Square:
+                    Debug.Log("Checking death of square");
                     PlayerMovement.Instance.CheckDeath(PlayerShape.Shape.SQUARE);
                     break;
                 case TagManager.Rectangle:
@@ -47,7 +48,8 @@ public class PlayerCollision {
                     break;
             }
         }
-        else if (collisionInfo.gameObject.transform.tag == TagManager.LevelComplete)
+
+        if (collisionInfo.gameObject.transform.tag == TagManager.LevelComplete)
         {
             GamePlayManager.Instance.LevelCompleted();
         }

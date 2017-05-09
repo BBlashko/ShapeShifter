@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 public class CurrentGame : MonoBehaviour
-{ 
+{
     public int ScoreRule;
     public int TimeRule;
     public int TokenRule;
@@ -11,8 +11,9 @@ public class CurrentGame : MonoBehaviour
     {
         mPlayer = GameObject.Find(mPlayerName);
         string levelCompletePath = "GamePlay/Level" + LevelId.ToString() + "(Clone)" + levelCompleteGameObjectName;
+        Debug.Log(levelCompletePath);
         mCompletePlatform = GameObject.Find(levelCompletePath);
-        mTotalDistance = mCompletePlatform.transform.position.x;
+        mTotalDistance = mCompletePlatform.transform.position.x - mPlayer.transform.position.x;
         mCompletePlatformWidth = mCompletePlatform.GetComponentInChildren<BoxCollider>().bounds.size.x;
 
         mTokens = 0;
@@ -25,6 +26,24 @@ public class CurrentGame : MonoBehaviour
         mHasThirdStar = false;
 
         Debug.Log("Start  " + mStartTime);
+    }
+
+    public void PauseGame()
+    {
+        mPausedStartElapsed = ElapsedTime;
+        mIsPaused = true;
+        mPausedTimeStart = Time.time;
+    }
+
+    public void ResumeGame()
+    {
+        mIsPaused = false;
+        mPausedTime = Time.time - mPausedTimeStart;
+    }
+
+    public bool IsPaused
+    {
+        get { return mIsPaused; }
     }
 
     public int Tokens
@@ -41,7 +60,17 @@ public class CurrentGame : MonoBehaviour
 
     public float ElapsedTime
     {
-        get { return Time.time - mStartTime; }
+        get
+        {
+            if (!mIsPaused)
+            {
+                return Time.time - mStartTime - mPausedTime;
+            }
+            else
+            {
+                return mPausedStartElapsed;
+            }
+        }
     }
 
     public bool HasFirstStar
@@ -94,7 +123,7 @@ public class CurrentGame : MonoBehaviour
 
     public float PercentageDistanceLeft()
     {
-        float retval = (((mCompletePlatform.transform.position.x - (mCompletePlatformWidth/2)) - mPlayer.transform.position.x) / mTotalDistance) * 100;
+        float retval = (((mCompletePlatform.transform.position.x - (mCompletePlatformWidth / 2)) - mPlayer.transform.position.x) / mTotalDistance) * 100;
         if (retval < 0.0f)
         {
             return 0.0f;
@@ -104,6 +133,24 @@ public class CurrentGame : MonoBehaviour
             return 100.0f;
         }
         return retval;
+    }
+
+    public Vector3 PlayerPosition
+    {
+        get { return mPlayerPosition; }
+        set { mPlayerPosition = value; }
+    }
+
+    public Vector3 LevelPosition
+    {
+        get { return mLevelPosition; }
+        set { mLevelPosition = value; }
+    }
+
+    public void TutorialRespawnPlayer()
+    {
+        PlayerMovement.Instance.Respawn(mPlayerPosition);
+        gameObject.transform.position = mLevelPosition;
     }
 
     //Player pointer
@@ -128,4 +175,14 @@ public class CurrentGame : MonoBehaviour
     private bool mHasFirstStar = false;
     private bool mHasSecondStar = false;
     private bool mHasThirdStar = false;
+
+    //Game State
+    private bool mIsPaused;
+    private float mPausedTime = 0;
+    private float mPausedStartElapsed;
+    private float mPausedTimeStart;
+
+    //Tutorial Player/level location for respawn
+    private Vector3 mPlayerPosition;
+    private Vector3 mLevelPosition;
 }

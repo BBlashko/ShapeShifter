@@ -4,6 +4,7 @@ public class PlayerManager : MonoBehaviour
 {
     void Start()
     {
+        PlayerMovement.Instance.MyMonoBehaviour = this;
         PlayerMovement.Instance.EnableDefaultShape();
     }
 

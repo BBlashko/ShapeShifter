@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
-public class GamePlayManager {
+public class GamePlayManager
+{
 
     public static GamePlayManager Instance
     {
@@ -11,6 +12,20 @@ public class GamePlayManager {
                 instance = new GamePlayManager();
             }
             return instance;
+        }
+    }
+
+    public void SkipTutorial()
+    {
+        if (mCurrentLevelId == 0)
+        {
+            DestroyCurrentLevel();
+            DestroyCurrentGame();
+            LoadLevel(1);
+            StartGame();
+            mLevelScroller.StartScrolling();
+            mGroundScroller.StartScrolling();
+            mBackgroundScroller.StartScrolling();
         }
     }
 
@@ -35,6 +50,31 @@ public class GamePlayManager {
 
         //Set HUD
         mHUDCanvas.SetActive(true);
+    }
+
+    public void PauseGame()
+    {
+        PauseCurrentGame();
+        PlayingLevel = false;
+        if (mLevelScroller != null)
+        {
+            mLevelScroller.StopScrolling();
+        }
+        mGroundScroller.StopScrolling();
+        mBackgroundScroller.StopScrolling();
+    }
+
+    public void ResumeGame()
+    {
+        Debug.Log("Resuming Game");
+        PlayingLevel = true;
+        ResumeCurrentGame();
+        if (mLevelScroller != null)
+        {
+            mLevelScroller.StartScrolling();
+        }
+        mGroundScroller.StartScrolling();
+        mBackgroundScroller.StartScrolling();
     }
 
     //TODO:
@@ -77,6 +117,11 @@ public class GamePlayManager {
             }
         }
         StartGame();
+    }
+
+    public void TutorialRespawnPlayer()
+    {
+        mCurrentGame.TutorialRespawnPlayer();
     }
 
     public void ResetEnvironment()
@@ -131,13 +176,22 @@ public class GamePlayManager {
 
     private void CreateNewCurrentGame()
     {
-       
+        mCurrentGame = GameObject.Find("GamePlay/Level" + mCurrentLevelId.ToString() + "(Clone)").GetComponent<CurrentGame>();
     }
 
     private void StartCurrentGame()
     {
-        mCurrentGame = GameObject.Find("GamePlay/Level" + mCurrentLevelId.ToString() + "(Clone)").GetComponent<CurrentGame>();
         mCurrentGame.StartGame();
+    }
+
+    private void PauseCurrentGame()
+    {
+        mCurrentGame.PauseGame();
+    }
+
+    private void ResumeCurrentGame()
+    {
+        mCurrentGame.ResumeGame();
     }
 
     private void DestroyCurrentGame()
