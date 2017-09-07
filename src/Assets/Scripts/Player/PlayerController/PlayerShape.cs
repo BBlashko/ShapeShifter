@@ -11,12 +11,12 @@ public class PlayerShape {
         mPlayerInitialPosition = player.transform.position;
 
         //Gameobjects
-        mSquareShape = player.transform.FindChild(mSquareObjectName).gameObject;
-        mTriangleShape = player.transform.FindChild(mTriangleObjectName).gameObject;
-        mRectangleShape = player.transform.FindChild(mRectangleObjectName).gameObject;
+        mSquareShape = player.transform.Find(mSquareObjectName).gameObject;
+        mTriangleShape = player.transform.Find(mTriangleObjectName).gameObject;
+        mRectangleShape = player.transform.Find(mRectangleObjectName).gameObject;
 
         //Particle Systems
-        mPlayerDeathParticles = player.transform.FindChild(mDeathParticlesName).GetComponent<ParticleSystem>();
+        mPlayerDeathParticles = player.transform.Find(mDeathParticlesName).GetComponent<ParticleSystem>();
 
         //Boundaries
         mLeftBoundary = GameObject.Find(mLeftBoundaryName);

@@ -100,7 +100,7 @@ public class MenuManager {
 
         for (int i = 0; i < names.Length; i++)
         {
-            Transform childTransform = mParentMenuGameObject.transform.FindChild(names[i]);
+            Transform childTransform = mParentMenuGameObject.transform.Find(names[i]);
             mMenuGameObjects[i] = childTransform.gameObject;
         }
     }
