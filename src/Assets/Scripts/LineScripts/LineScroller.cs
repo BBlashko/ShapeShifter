@@ -5,7 +5,6 @@ public class LineScroller : MonoBehaviour
 
     public void Init(float xSpeed, Vector3[] startingLinePositions, float resetX, float leftXResetTrigger, float width)
     {
-        mScreenWidth = width;
         mScreenLeftXPosition = leftXResetTrigger;
         mXSpeed = xSpeed;
         mCurrentLinePositions = startingLinePositions;
@@ -27,7 +26,6 @@ public class LineScroller : MonoBehaviour
     }
 
     private float mScreenLeftXPosition;
-    private float mScreenWidth;
     private float mXSpeed;
     private Vector3[] mCurrentLinePositions;
     private float mResetX;

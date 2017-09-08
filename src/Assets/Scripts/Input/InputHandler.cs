@@ -105,6 +105,15 @@ public class InputHandler : MonoBehaviour {
             }
         }
     }
+
+    private Vector2 mTouchStart;
+    private float mStartTime;
+    private bool mIsPossibleSwipe = false;
+    private SwipeDirection mSwipeDirection;               //vertical = 0;
+    private float mEpsilon = 200.0f;
+    private float mMinSwipeDistance = 50.0f;
+    private float mMaxSwipeTime = 1.0f;
+
 #else
     private void CheckInput()
     {
@@ -131,11 +140,4 @@ public class InputHandler : MonoBehaviour {
     }
 #endif
 
-    private Vector2 mTouchStart;
-    private float mStartTime;
-    private bool mIsPossibleSwipe = false;
-    private SwipeDirection mSwipeDirection;               //vertical = 0;
-    private float mEpsilon = 200.0f;
-    private float mMinSwipeDistance = 50.0f;
-    private float mMaxSwipeTime = 1.0f;
 }

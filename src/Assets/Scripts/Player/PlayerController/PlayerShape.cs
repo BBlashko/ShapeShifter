@@ -73,36 +73,39 @@ public class PlayerShape {
         DisableCurrentShape();
         mSquareShape.SetActive(true);
         CurrentShape = Shape.SQUARE;
-        mPlayerRigidBody.isKinematic = false;
+        //mPlayerRigidBody.isKinematic = false;
     }
 
     public void InstantDeath()
     {
-        Death(false);
+        Death(CurrentShape);
     }
 
     public void CheckDeath(Shape shape)
     {
-        Death(false, shape);
+        Death(shape);
     }
 
-    private void Death(bool checkShape, Shape shape = Shape.SQUARE)
+    public Shape GetCurrentShape()
+    {
+        return CurrentShape;
+    }
+
+    private void Death(Shape shape, bool checkShape = false)
     {
         if (CurrentShape != Shape.DEATH)
         {
-            Debug.Log("1");
             if (checkShape && CurrentShape == shape)
             {
                 Debug.Log("Currentshape = " + CurrentShape + " Shape = " + shape);
                 return;
             }
 
-            mPlayerRigidBody.isKinematic = true;
+            //mPlayerRigidBody.isKinematic = true;
             DisableCurrentShape();
 
             //Default is Square Shape Material
             Material material = mSquareShape.transform.GetComponent<MeshRenderer>().material;
-            Debug.Log("2");
             switch (CurrentShape)
             {
                 case Shape.RECTANGLE:
@@ -125,8 +128,7 @@ public class PlayerShape {
             }
             else
             {
-                Debug.Log("Player Died during tutorial");
-                
+                Debug.Log("Player died during tutorial");
                 PlayerMovement.Instance.MyMonoBehaviour.StartCoroutine(PlayDeathAnimationAndRespawnPlayer());
             }
         }
@@ -164,6 +166,8 @@ public class PlayerShape {
                 break;
         }
     }
+
+
 
     //Player Objects
     public GameObject mPlayerObject;

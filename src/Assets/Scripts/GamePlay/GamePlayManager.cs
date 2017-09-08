@@ -143,7 +143,10 @@ public class GamePlayManager
 
     public void StartLevelScroll(Vector3 velocity)
     {
-        mLevelScroller = mCurrentLevel.AddComponent<LevelScroller>();
+        if (mLevelScroller == null)
+        {
+            mLevelScroller = mCurrentLevel.AddComponent<LevelScroller>();
+        }
         mLevelScroller.Velocity = velocity;
     }
 
@@ -207,8 +210,6 @@ public class GamePlayManager
         mGroundScroller = GameObject.Find(mGroundScrollerName).GetComponent<GroundScroller>();
         mBackgroundScroller = Camera.main.GetComponent<BackgroundLines>();
         mHUDCanvas = HelperFunctions.FindInactiveGameObject(mHUDCanvasName);
-        mHUDManager = mHUDCanvas.GetComponent<HUDManager>();
-        mMenuCanvas = GameObject.Find(mMenuCanvasName);
     }
 
     private static GamePlayManager instance;
@@ -233,12 +234,10 @@ public class GamePlayManager
     private int mCurrentLevelId;
 
     //HUDCanvas
-    private GameObject mMenuCanvas;
     private const string mMenuCanvasName = "MenuCanvas";
 
     //HUDCanvas
     private GameObject mHUDCanvas;
-    private HUDManager mHUDManager;
     private const string mHUDCanvasName = "HUDCanvas";
 
     //Booleans

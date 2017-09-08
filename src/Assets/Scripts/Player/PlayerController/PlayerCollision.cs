@@ -16,26 +16,25 @@ public class PlayerCollision {
 
     public void OnCollisionEnter(Collision collisionInfo)
     {
-        Debug.Log("GameObject name on collision enter = " + collisionInfo.gameObject.name);
+        if (collisionInfo.gameObject.transform.tag == TagManager.Ground)
+        {
+            PlayerMovement.Instance.GroundCollisionStay(collisionInfo);
+        }
+
         if (collisionInfo.gameObject.transform.tag == TagManager.LeftBoundary)
         {
             //Resets Left Boundary Condition
-            Debug.Log("CollisionEntered");
             PlayerMovement.Instance.IsAgainstLeftBoundary = true;
-        }
-        else if (collisionInfo.gameObject.transform.tag == TagManager.Ground)
-        {
-            //Emits the players ground particles
-            PlayerMovement.Instance.EnableParticles();
         }
         else if (collisionInfo.gameObject.layer == mDeathLayer)
         {
-            Debug.Log("Death Layer!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             //Triggers Player Death
             switch (collisionInfo.gameObject.tag)
             {
+                case TagManager.Obstacle:
+                    PlayerMovement.Instance.InstantDeath();
+                    break;
                 case TagManager.Square:
-                    Debug.Log("Checking death of square");
                     PlayerMovement.Instance.CheckDeath(PlayerShape.Shape.SQUARE);
                     break;
                 case TagManager.Rectangle:
@@ -59,13 +58,11 @@ public class PlayerCollision {
     {
         if (collisionInfo.gameObject.transform.tag == TagManager.LeftBoundary)
         {
-            Debug.Log("CollisionExit");
             PlayerMovement.Instance.IsAgainstLeftBoundary = false;
         }
         else if (collisionInfo.gameObject.transform.tag == TagManager.Ground)
         {
-            PlayerMovement.Instance.SetGravity(true);
-            PlayerMovement.Instance.DisableParticles();
+            PlayerMovement.Instance.GroundCollisionExit(collisionInfo);
         }
     }
 
@@ -73,7 +70,7 @@ public class PlayerCollision {
     {
         if (collisionInfo.gameObject.transform.tag == TagManager.Ground)
         {
-            PlayerMovement.Instance.GroundCollision(collisionInfo);
+            PlayerMovement.Instance.GroundCollisionStay(collisionInfo);
         }
     }
 

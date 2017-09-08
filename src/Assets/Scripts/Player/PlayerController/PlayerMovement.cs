@@ -22,16 +22,6 @@ public class PlayerMovement : PlayerShape {
             InstantDeath();
         }
 
-        //Check if player is falling
-        if (mPlayerRigidBody.velocity.y != 0 && !mIsFalling)
-        {
-            mIsFalling = true;
-        }
-        else if (mPlayerRigidBody.velocity.y == 0 && mIsFalling)
-        {
-            mIsFalling = false;
-        }
-
         //Player burst checks
         if (mPlayerRigidBody.velocity.x <= 0.5f && mIsBursting)
         {
@@ -43,12 +33,12 @@ public class PlayerMovement : PlayerShape {
             mPlayerRigidBody.AddForce(mHorizontalForce);
         }
         
-        if (!mIsFalling && !mParticlesEnabled)
+        if (mIsGrounded && !mParticlesEnabled)
         {
             EnableParticles();
             mParticlesEnabled = true;
         }
-        else if (mIsFalling && mParticlesEnabled)
+        else if (!mIsGrounded && mParticlesEnabled)
         {
             DisableParticles();
             mParticlesEnabled = false;
@@ -68,7 +58,7 @@ public class PlayerMovement : PlayerShape {
 
     public void Jump()
     {
-        if (!mIsFalling || mAllowedDoubleJump)
+        if (mIsGrounded || mAllowedDoubleJump)
         {
             switch(CurrentShape)
             {
@@ -83,11 +73,11 @@ public class PlayerMovement : PlayerShape {
                     mPlayerRigidBody.velocity = mSquareJumpVelocity;
                     break;
             }
-            if (mIsFalling)
+            if (!mIsGrounded && mAllowedDoubleJump)
             {
                 mAllowedDoubleJump = false;
             }
-            mIsFalling = true;
+            mIsGrounded = false;
         }
     }
 
@@ -98,7 +88,7 @@ public class PlayerMovement : PlayerShape {
         {
             ChangeShape(Shape.TRIANGLE);
             mIsBursting = true;
-            mPlayerRigidBody.useGravity = false;
+            SetGravity(false);
             mPlayerRigidBody.velocity = mBurstVelocity;
         }
     }
@@ -112,16 +102,10 @@ public class PlayerMovement : PlayerShape {
 #endregion
 
     #region Collision
-    public void GroundCollision(Collision collisionInfo)
+    public void GroundCollisionStay(Collision collisionInfo)
     {
-        if (!mAllowedDoubleJump)
-        {
-            mAllowedDoubleJump = true;
-        }
-        if (mIsFalling)
-        {
-            mIsFalling = false;
-        }
+        mIsGrounded = true;
+        mAllowedDoubleJump = true;
 
         //Moving players finished burst towards the left boundary
         if (!mIsAgainstLeftBoundary && !mIsBursting && !GamePlayManager.Instance.PlayingLevel)
@@ -129,9 +113,7 @@ public class PlayerMovement : PlayerShape {
             GameObject collisionObject = collisionInfo.gameObject;
 
             float xSpeed;
-
-            GroundScroller gs;
-            if ((gs = collisionObject.GetComponentInParent<GroundScroller>()) != null)
+            if (collisionObject.GetComponentInParent<GroundScroller>() != null)
             {
                 xSpeed = collisionObject.GetComponentInParent<GroundScroller>().Velocity.x;
             }
@@ -142,8 +124,15 @@ public class PlayerMovement : PlayerShape {
             
             mPlayerRigidBody.MovePosition(mPlayerObject.transform.position + Vector3.right * xSpeed * Time.deltaTime);
         }
+    }
 
-      
+    public void GroundCollisionExit(Collision collisionInfo)
+    {
+        mIsGrounded = false;
+
+        //used to fix a gravity glitch when exiting the ground, or platform box colliders
+        mPlayerRigidBody.velocity += new Vector3(0.0f, -0.1f, 0.0f);
+        mPlayerRigidBody.useGravity = true;      
     }
     #endregion
 
@@ -152,18 +141,6 @@ public class PlayerMovement : PlayerShape {
     {
         get { return mIsAgainstLeftBoundary; }
         set { mIsAgainstLeftBoundary = value; }
-    }
-
-    //public bool IsFalling
-    //{
-    //    get { return mIsFalling; }
-    //    set { mIsFalling = value; }
-    //}
-
-    public bool AllowedDoubleJump
-    {
-        get { return mAllowedDoubleJump; }
-        set { mAllowedDoubleJump = value; }
     }
 
     public bool IsBursting
@@ -195,7 +172,7 @@ public class PlayerMovement : PlayerShape {
     //Jump variables
     private Vector3 mSquareJumpVelocity = new Vector3(0.0f, 9.5f, 0.0f);
     private Vector3 mRectangleJumpVelocity = new Vector3(0.0f, 5.0f, 0.0f);
-    private bool mIsFalling = false;
+    private bool mIsGrounded = false;
     private bool mAllowedDoubleJump = true;
 
     //Drop variables
