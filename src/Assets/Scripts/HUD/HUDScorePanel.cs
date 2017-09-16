@@ -16,10 +16,13 @@ public class HUDScorePanel {
 
     public void Update()
     {
-        UpdateScore();
-        UpdateTokenCount();
-        UpdateTime();
-        UpdateDistance();
+        if (!GamePlayManager.Instance.IsCountownEnabled())
+        {
+            UpdateScore();
+            UpdateTokenCount();
+            UpdateTime();
+            UpdateDistance();
+        }
     }
 
     public void SetObjects(Text score, Text tokens, Text[] time, Text distance, RectTransform distanceLine, GameObject distanceBar)

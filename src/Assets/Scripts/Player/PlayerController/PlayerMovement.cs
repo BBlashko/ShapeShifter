@@ -17,7 +17,7 @@ public class PlayerMovement : PlayerShape {
     public void Update()
     {
         //Check Position for death
-        if (mPlayerObject.transform.position.y < -5.2f || mPlayerObject.transform.position.x < -6.0f)
+        if (mPlayerObject.transform.position.y < -5.2f /*|| mPlayerObject.transform.position.x < -6.0f*/)
         {
             InstantDeath();
         }
@@ -132,7 +132,7 @@ public class PlayerMovement : PlayerShape {
 
         //used to fix a gravity glitch when exiting the ground, or platform box colliders
         mPlayerRigidBody.velocity += new Vector3(0.0f, -0.1f, 0.0f);
-        mPlayerRigidBody.useGravity = true;      
+        mPlayerRigidBody.useGravity = true;
     }
     #endregion
 

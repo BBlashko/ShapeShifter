@@ -6,7 +6,7 @@ public class Tutorial : MonoBehaviour {
 
     public List<GameObject> TutorialScreens;
     public GameObject mTutorialCanvas;
-    public GameObject Level;
+    public List<GameObject> GroundGameObjects;
 
     void Start()
     {
@@ -16,6 +16,7 @@ public class Tutorial : MonoBehaviour {
         mTutorialCanvas.SetActive(true);
         TutorialScreens[mScreenIndex].SetActive(true);
         mPlayerGameObject = GameObject.Find("Player");
+        mGroundScroller = GameObject.Find("GroundScroller").GetComponent<GroundScroller>();
     }
 
     void Update()
@@ -26,7 +27,6 @@ public class Tutorial : MonoBehaviour {
             float percentage = 100.0f - GamePlayManager.Instance.GetCurrentGame().PercentageDistanceLeft();
             if (mCurrTriggerIndex < mDescriptionTriggers.Count && percentage >= mDescriptionTriggers[mCurrTriggerIndex])
             {
-                Debug.Log("STOPPING TUTORIAL1!!!!");
                 mCurrTriggerIndex++;
                 GamePlayManager.Instance.PauseGame();
                 NextTutorialScreen();
@@ -66,11 +66,16 @@ public class Tutorial : MonoBehaviour {
             return;
         }
 
-        
-
         if (mScreenIndex == mTutorialLevelStartIndex)
         {
             //call when ready to start level
+            PlayerMovement.Instance.Respawn();
+            foreach (GameObject ground in GroundGameObjects)
+            {
+                ground.SetActive(true);
+            }
+            mGroundScroller.StopScrolling();
+
             GamePlayManager.Instance.StartGame();
             TutorialScreens[mScreenIndex].SetActive(true);
         }
@@ -94,4 +99,5 @@ public class Tutorial : MonoBehaviour {
     private int mCurrTriggerIndex = 0;
 
     private GameObject mPlayerGameObject;
+    private GroundScroller mGroundScroller;
 }

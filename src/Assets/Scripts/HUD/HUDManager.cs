@@ -9,11 +9,7 @@ public class HUDManager : MonoBehaviour {
     public Text DistanceText;
 
     public GameObject DistanceBar;
-    public RectTransform DistanceLine;
-
-    //TODO:
-    //public GameObject DistanceObject
-    //public Text TimeText;
+    public RectTransform DistanceLine;    
 
     void Start()
     {

@@ -120,22 +120,18 @@ public class InputHandler : MonoBehaviour {
         if (Input.GetKeyDown("w"))
         {
             PlayerMovement.Instance.Jump();
-            Debug.Log("[TouchHandler] w ");
         }
         else if (Input.GetKeyDown("a"))
         {
             PlayerMovement.Instance.EnableDefaultShape();
-            Debug.Log("[TouchHandler] a ");
         }
         else if (Input.GetKeyDown("d"))
         {
             PlayerMovement.Instance.Burst();
-            Debug.Log("[TouchHandler] d ");
         }
         else if (Input.GetKeyDown("s"))
         {
             PlayerMovement.Instance.Drop();
-            Debug.Log("[TouchHandler] s ");
         }
     }
 #endif

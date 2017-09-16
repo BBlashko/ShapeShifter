@@ -123,16 +123,20 @@ public class CurrentGame : MonoBehaviour
 
     public float PercentageDistanceLeft()
     {
-        float retval = (((mCompletePlatform.transform.position.x - (mCompletePlatformWidth / 2)) - mPlayer.transform.position.x) / mTotalDistance) * 100;
-        if (retval < 0.0f)
+        if (mCompletePlatform != null)
         {
-            return 0.0f;
+            float retval = (((mCompletePlatform.transform.position.x - (mCompletePlatformWidth / 2)) - mPlayer.transform.position.x) / mTotalDistance) * 100;
+            if (retval < 0.0f)
+            {
+                return 0.0f;
+            }
+            else if (retval > 100.0f)
+            {
+                return 100.0f;
+            }
+            return retval;
         }
-        else if (retval > 100.0f)
-        {
-            return 100.0f;
-        }
-        return retval;
+        return 100.0f;
     }
 
     public Vector3 PlayerPosition

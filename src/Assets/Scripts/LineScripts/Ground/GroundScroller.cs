@@ -20,27 +20,18 @@ public class GroundScroller : MonoBehaviour {
             GameObject section = GroundSections[i];
             section.transform.position += Velocity * Time.deltaTime;
 
-            if (section.transform.position.x < -GroundSectionLength * 2.0f)
+            if (GamePlayManager.Instance.PlayingLevel)
             {
-                if (GamePlayManager.Instance.PlayingLevel && !mFinishedStartingLevel)
-                {
-                    if (mStartingLevelFirstReset)
-                    {
-                        GamePlayManager.Instance.StartLevelScroll(Velocity);
-                        section.transform.position += mSectionResetPosition;
-                        mStartingLevelFirstReset = false;
-                    }
-                    else if (mFirstResetSectionIndex == i)
-                    {
-                        StopScrolling();
-                        mFinishedStartingLevel = true;
-                    }
-                }
-                else
-                {
-                    section.transform.position += mSectionResetPosition;
-                }
+                //PlayingLevel is true, and the ground should be disabled and stopped scrolling
+                StopScrolling();
+                SetActive(false);
+                continue;
             }
+            else if(section.transform.position.x < -GroundSectionLength * 2.0f)
+            {
+                //PlayingLevel is false and ground has been reset and needs to be scrolled.
+                section.transform.position += mSectionResetPosition;
+            }            
         }
     }
 
@@ -49,13 +40,20 @@ public class GroundScroller : MonoBehaviour {
         return Velocity;
     }
 
+    public void SetActive(bool b)
+    {
+        this.gameObject.SetActive(b);
+    }
+
     public void StopScrolling()
     {
+        SetActive(false);
         Velocity = new Vector3(0.0f, 0.0f, 0.0f);
     }
 
     public void StartScrolling()
     {
+        SetActive(true);
         Velocity = InitialVelocity;
     }
 
@@ -67,20 +65,10 @@ public class GroundScroller : MonoBehaviour {
             section.transform.position = new Vector3(mStartingPosition.x + (GroundSectionLength * i), mStartingPosition.y, mStartingPosition.z);
         }
 
-        //level starting variables
-        mFirstResetSectionIndex = -1;
-        mFinishedStartingLevel = false;
-        mStartingLevelFirstReset = true;
-
         StartScrolling();
     }
 
     private Vector3 InitialVelocity;
     private Vector3 mSectionResetPosition;
-
-    private int mFirstResetSectionIndex = -1;
-    private bool mFinishedStartingLevel = false;
-    private bool mStartingLevelFirstReset = true;
-
     private Vector3 mStartingPosition;
 }

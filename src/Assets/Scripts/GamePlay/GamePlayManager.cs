@@ -44,18 +44,38 @@ public class GamePlayManager
 
     public void StartGame()
     {
-        StartCurrentGame();
-        mPlayingLevel = true;
+        PlayingLevel = true;
         MenuManager.Instance.DisableCurrentMenu();
 
         //Set HUD
         mHUDCanvas.SetActive(true);
+        StartCountdown();
+        mBackgroundScroller.StopScrolling();
+    }
+
+    public void StartCountdown()
+    {
+        
+        mCountdownAnimator.enabled = true;
+        mCountdownAnimator.Play(0);
+    }
+
+    public bool IsCountownEnabled()
+    {
+        return mCountdownAnimator.enabled;
+    }
+
+    public void StartCurrentGame()
+    {
+        mLeftBoundary.SetActive(false);
+        mCurrentGame.StartGame();
+        StartLevelScroll();
+        mBackgroundScroller.StartScrolling();
     }
 
     public void PauseGame()
     {
         PauseCurrentGame();
-        PlayingLevel = false;
         if (mLevelScroller != null)
         {
             mLevelScroller.StopScrolling();
@@ -67,7 +87,6 @@ public class GamePlayManager
     public void ResumeGame()
     {
         Debug.Log("Resuming Game");
-        PlayingLevel = true;
         ResumeCurrentGame();
         if (mLevelScroller != null)
         {
@@ -141,13 +160,13 @@ public class GamePlayManager
         GameObject.Destroy(mCurrentLevel);
     }
 
-    public void StartLevelScroll(Vector3 velocity)
+    public void StartLevelScroll()
     {
         if (mLevelScroller == null)
         {
             mLevelScroller = mCurrentLevel.AddComponent<LevelScroller>();
         }
-        mLevelScroller.Velocity = velocity;
+        mLevelScroller.Velocity = mGroundVelocity;
     }
 
     public bool PlayingLevel
@@ -158,7 +177,8 @@ public class GamePlayManager
 
     private void StopGame()
     {
-        mPlayingLevel = false;
+        PlayingLevel = false;
+        mLeftBoundary.SetActive(true);
 
         //Stop Level, Ground, and Background Scroller
         mLevelScroller.StopScrolling();
@@ -180,11 +200,6 @@ public class GamePlayManager
     private void CreateNewCurrentGame()
     {
         mCurrentGame = GameObject.Find("GamePlay/Level" + mCurrentLevelId.ToString() + "(Clone)").GetComponent<CurrentGame>();
-    }
-
-    private void StartCurrentGame()
-    {
-        mCurrentGame.StartGame();
     }
 
     private void PauseCurrentGame()
@@ -210,6 +225,9 @@ public class GamePlayManager
         mGroundScroller = GameObject.Find(mGroundScrollerName).GetComponent<GroundScroller>();
         mBackgroundScroller = Camera.main.GetComponent<BackgroundLines>();
         mHUDCanvas = HelperFunctions.FindInactiveGameObject(mHUDCanvasName);
+        mCountdownAnimator = mHUDCanvas.GetComponent<Animator>();
+        mCountdownGameObject = mHUDCanvas.transform.Find("Countdown").gameObject;
+        mLeftBoundary = GameObject.Find(mLeftBoundaryName);
     }
 
     private static GamePlayManager instance;
@@ -219,10 +237,13 @@ public class GamePlayManager
 
     //LevelScroller
     private LevelScroller mLevelScroller;
+    private GameObject mLeftBoundary;
+    private string mLeftBoundaryName = "LeftBoundary";
 
     //GroundScroller
     private GroundScroller mGroundScroller;
     private const string mGroundScrollerName = "GroundScroller";
+    private Vector3 mGroundVelocity = new Vector3(-3.0f, 0.0f, 0.0f);
 
     //GroundScroller
     private BackgroundLines mBackgroundScroller;
@@ -239,6 +260,8 @@ public class GamePlayManager
     //HUDCanvas
     private GameObject mHUDCanvas;
     private const string mHUDCanvasName = "HUDCanvas";
+    private Animator mCountdownAnimator;
+    private GameObject mCountdownGameObject;
 
     //Booleans
     private bool mPlayingLevel = false;

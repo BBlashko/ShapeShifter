@@ -82,6 +82,7 @@
     <Compile Include="Assets\Scripts\GamePlay\CurrentGame.cs" />
     <Compile Include="Assets\Scripts\GamePlay\GamePlayManager.cs" />
     <Compile Include="Assets\Scripts\GamePlay\LevelScroller.cs" />
+    <Compile Include="Assets\Scripts\HUD\CountdownTrigger.cs" />
     <Compile Include="Assets\Scripts\HUD\HUDManager.cs" />
     <Compile Include="Assets\Scripts\HUD\HUDScorePanel.cs" />
     <Compile Include="Assets\Scripts\Input\InputHandler.cs" />

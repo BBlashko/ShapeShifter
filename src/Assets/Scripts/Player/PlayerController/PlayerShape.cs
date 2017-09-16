@@ -73,7 +73,7 @@ public class PlayerShape {
         DisableCurrentShape();
         mSquareShape.SetActive(true);
         CurrentShape = Shape.SQUARE;
-        //mPlayerRigidBody.isKinematic = false;
+        mPlayerRigidBody.isKinematic = false;
     }
 
     public void InstantDeath()
@@ -101,7 +101,7 @@ public class PlayerShape {
                 return;
             }
 
-            //mPlayerRigidBody.isKinematic = true;
+            mPlayerRigidBody.isKinematic = true;
             DisableCurrentShape();
 
             //Default is Square Shape Material
@@ -122,14 +122,14 @@ public class PlayerShape {
             mPlayerDeathParticles.GetComponent<ParticleSystemRenderer>().material = material;
             mPlayerDeathParticles.Play();
 
-            if (GamePlayManager.Instance.GetCurrentGame().LevelId != 0)
-            {
-                GamePlayManager.Instance.GameOver();
-            }
-            else
+            if (GamePlayManager.Instance.GetCurrentGame() != null && GamePlayManager.Instance.GetCurrentGame().LevelId == 0)
             {
                 Debug.Log("Player died during tutorial");
                 PlayerMovement.Instance.MyMonoBehaviour.StartCoroutine(PlayDeathAnimationAndRespawnPlayer());
+            }
+            else if (GamePlayManager.Instance.GetCurrentGame() != null)
+            {
+                GamePlayManager.Instance.GameOver();
             }
         }
     }

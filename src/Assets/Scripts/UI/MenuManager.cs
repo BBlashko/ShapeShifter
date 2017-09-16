@@ -26,12 +26,18 @@ public class MenuManager {
 
     public void DisableCurrentMenu()
     {
-        mCurrentMenu.SetActive(false);
+        if (mCurrentMenu != null)
+        {
+            mCurrentMenu.SetActive(false);  
+        }
     }
 
     public void EnableCurrentMenu()
     {
-        mCurrentMenu.SetActive(true);
+        if (mCurrentMenu != null)
+        {
+            mCurrentMenu.SetActive(true);
+        }
     }
 
     ////Display menu without adding to the menu stack
